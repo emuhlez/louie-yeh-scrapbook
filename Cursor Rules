@@ -1,0 +1,518 @@
+# Memory Scrapbook App - Cursor Agent Rules
+
+## Critical Design Constraints
+
+### Rule 1: CSS Styling & Design Patterns - STRICT ADHERENCE REQUIRED
+
+**YOU MUST ALWAYS follow the established design system. DO NOT deviate.**
+
+#### Color Palette (CSS Variables)
+```css
+--bg-main: #faf8f5;
+--bg-card: #ffffff;
+--text-primary: #2d2520;
+--text-secondary: #6b5d54;
+--accent-rose: #d4a5a5;
+--accent-gold: #c9a572;
+--shadow-soft: rgba(45, 37, 32, 0.08);
+--shadow-medium: rgba(45, 37, 32, 0.15);
+```
+
+**NEVER introduce new colors. ONLY use these variables.**
+
+#### Typography
+- **Display/Headers**: `'Playfair Display', serif` - weights 400, 700
+- **Body/UI**: `'Cormorant Garamond', serif` - weights 300, 400, 600
+- **NEVER** use any other fonts (no Inter, Roboto, Arial, system fonts)
+- Font sizes use `clamp()` for responsive scaling
+
+#### Spacing & Layout
+- Container max-width: `1400px`
+- Standard padding: `2rem` (desktop), `1rem` (mobile)
+- Border radius for cards: `12px-16px`
+- Border radius for buttons: `50px` (pill shape)
+- Grid gap: `2rem` (desktop), `1.5rem` (mobile)
+
+#### Animations
+- All transitions: `cubic-bezier(0.4, 0, 0.2, 1)` or `ease`
+- Standard duration: `0.3s-0.8s`
+- Existing keyframes: `fadeIn`, `fadeInDown`, `fadeInUp`
+- **DO NOT** add new animation libraries
+
+#### Component Patterns
+- **Buttons**: Pill-shaped, gradient backgrounds using accent colors, hover transforms with `translateY(-2px)`
+- **Cards**: White background, soft shadows, rounded corners, hover lift effect
+- **Modal**: Backdrop blur, centered, scale animation
+- **3D Cards**: `transform-style: preserve-3d`, `backface-visibility: hidden`
+
+#### 3D Scrolling Behavior - CRITICAL IMPLEMENTATION
+**This is the core interaction pattern. Follow exactly:**
+
+```css
+/* Container Setup */
+.scroll-view {
+  perspective: 1500px;
+  height: 80vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Individual Card Positioning */
+.scroll-card {
+  position: absolute;
+  width: clamp(280px, 35vw, 400px);
+  aspect-ratio: 3/4;
+  left: 50%;
+  top: 50%;
+  transform-style: preserve-3d;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+```
+
+**JavaScript Transform Logic (EXACT IMPLEMENTATION REQUIRED):**
+```javascript
+updateScrollPositions() {
+  const cards = document.querySelectorAll('.scroll-card');
+  const totalCards = cards.length;
+
+  cards.forEach((card, index) => {
+    const offset = index - this.currentScrollIndex;
+    const absOffset = Math.abs(offset);
+    
+    // Calculate transforms based on offset from center
+    let x = offset * 15;        // Horizontal spread (percentage)
+    let y = absOffset * 5;      // Vertical lift
+    let z = -absOffset * 150;   // Depth (pixels)
+    let rotateY = offset * 8;   // Horizontal rotation
+    let rotateX = -absOffset * 3; // Slight tilt
+    let scale = 1 - absOffset * 0.15; // Size reduction
+    let opacity = absOffset > 2 ? 0 : 1 - absOffset * 0.3;
+
+    card.style.transform = `
+      translate(-50%, -50%)
+      translate3d(${x}%, ${y}%, ${z}px)
+      rotateY(${rotateY}deg)
+      rotateX(${rotateX}deg)
+      scale(${scale})
+    `;
+    card.style.opacity = opacity;
+    card.style.zIndex = totalCards - absOffset;
+  });
+}
+```
+
+**Card Flip Behavior:**
+```css
+.scroll-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-card.flipped .scroll-card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}
+```
+
+**Navigation:**
+- Previous/Next buttons positioned at `left: 2rem` and `right: 2rem`
+- Only navigate if within bounds: `newIndex >= 0 && newIndex < memories.length`
+- Reset flip state when navigating away from a card
+- Stop music when navigating
+
+**DO NOT:**
+- ❌ Change the transform calculation values
+- ❌ Use different easing functions
+- ❌ Modify the 3D perspective value
+- ❌ Change the card aspect ratio without testing
+- ❌ Add scroll snapping or other scroll behaviors
+- ❌ Use libraries like Swiper or similar
+
+#### Background & Atmosphere
+- Gradient background: `linear-gradient(135deg, #faf8f5 0%, #f5f0e8 100%)`
+- Radial gradient overlays for depth (rose and gold with 3% opacity)
+- **NEVER** use solid colors as main backgrounds
+
+---
+
+## The 3D Scrolling Interaction - CRITICAL CORE FEATURE
+
+**This is the signature interaction of the app. It must be implemented exactly as specified.**
+
+### Concept
+Cards float in 3D space with a Pinterest/Are.na-style scrolling effect:
+- Center card is front and center (z-index highest)
+- Cards to the left/right are rotated and pushed back in space
+- Cards fade out as they get further from center
+- Smooth navigation between cards
+- Click center card to flip and reveal content on back
+
+### Required State
+```javascript
+this.currentScrollIndex = 0; // Which card is centered
+```
+
+### Core Methods Needed
+
+#### 1. updateScrollPositions()
+**Purpose:** Recalculates all card positions based on currentScrollIndex
+**Called:** After navigation, after render, on view switch
+**Logic:** Uses the exact transform calculations provided in Component Patterns section
+
+#### 2. navigateScroll(direction)
+**Purpose:** Move to prev/next card
+**Parameters:** direction (-1 for prev, +1 for next)
+**Behavior:**
+- Check bounds before navigating
+- Update currentScrollIndex
+- Call updateScrollPositions()
+- Unflip all cards (remove 'flipped' class)
+- Stop any playing music
+
+#### 3. Card Click Handler
+**Purpose:** Flip the center card when clicked
+**Behavior:**
+- Only flip if card index === currentScrollIndex
+- Toggle 'flipped' class on the card
+- If flipping to back and card has music, play it
+- If flipping to front, stop music
+
+### CSS Requirements
+All cards must have:
+- `position: absolute`
+- `transform-style: preserve-3d`
+- Dynamic `transform` applied via JavaScript
+- Dynamic `opacity` and `zIndex` applied via JavaScript
+
+Card inner (for flip):
+- `transform-style: preserve-3d`
+- Transition on transform
+- Front and back faces with `backface-visibility: hidden`
+
+### Navigation Controls
+- Two buttons: Previous (‹) and Next (›)
+- Positioned at sides of scroll view
+- Only navigate if within array bounds
+- Circular pill buttons with hover effects
+
+### Mobile Considerations
+- Reduce card width on mobile: `width: 85vw`
+- Smaller navigation buttons
+- Same transform logic (don't simplify)
+- Touch-friendly tap areas
+
+### Testing Checklist
+- [ ] Cards arranged in 3D space correctly
+- [ ] Center card is fully visible and centered
+- [ ] Side cards are rotated and pushed back
+- [ ] Navigation moves through cards smoothly
+- [ ] Cards beyond offset 2 are invisible (opacity 0)
+- [ ] Flip only works on center card
+- [ ] Navigation resets flip state
+- [ ] Z-index ensures center card is on top
+
+---
+
+### Rule 2: Incremental Development - ONE FEATURE AT A TIME
+
+**Build features slowly and methodically. DO NOT skip ahead.**
+
+#### Development Process:
+1. **Implement ONE feature completely** before moving to the next
+2. **Test the feature** to ensure it works
+3. **Confirm with user** before proceeding
+4. **Document what was added**
+
+#### Memory Types Supported:
+- **Letters**: Text-based memories with optional cover images
+- **Photos**: Image galleries with captions and dates
+- **Music**: Audio memories with album art and playback
+- **Videos**: Video memories with thumbnails and playback
+- **ALL memories are displayed chronologically** (most recent first)
+
+#### Feature Implementation Order (if starting from scratch):
+1. Basic HTML structure + CSS styling
+2. Grid view rendering (showing all memory cards)
+3. Modal for creating new memories (with media type selection)
+4. **Auto-save implementation** (immediate save to window.storage)
+5. **Load from storage on app init** (populate memories array)
+6. Letter memory type implementation
+7. Photo memory type implementation
+8. Music memory type implementation
+9. Video memory type implementation
+10. Chronological sorting (always maintain date order)
+11. **3D scroll view container setup** (perspective, positioning)
+12. **3D card positioning logic** (the updateScrollPositions transform calculations)
+13. **Card flip interaction** (front shows media, back shows details/caption)
+14. **Navigation controls** (prev/next buttons with bounds checking)
+15. **Card navigation behavior** (update positions when navigating, reset flips)
+16. Media playback (music/video)
+17. Mobile responsiveness
+18. Polish & refinements
+14. Polish & refinements
+
+#### When Adding a Feature:
+- **State what feature you're implementing**
+- **Show only the code for that feature**
+- **Explain what it does**
+- **Ask for confirmation before moving on**
+
+#### Example Response Format:
+```
+I'm now implementing: [Feature Name]
+
+[Code changes for this feature only]
+
+This adds: [Brief explanation]
+
+Ready to test this feature. Let me know if it works correctly before I move to the next one.
+```
+
+---
+
+## App Functionality
+
+### Memory Card Structure
+Each memory card contains:
+- **id**: Unique identifier (e.g., 'memory_1707789123456')
+- **type**: 'letter' | 'photo' | 'music' | 'video'
+- **date**: ISO date string for chronological sorting
+- **title**: Display title
+- **from/to**: Who the memory is from/for
+- **content**: Main content (text for letters, URL for media)
+- **thumbnail/image**: Visual representation
+- **caption**: Optional description
+- **music**: Optional background music URL
+
+**All memory data is automatically saved to persistent storage and survives page refreshes.**
+
+### Chronological Display
+- **ALWAYS** sort memories by date (newest first)
+- Date should be prominently displayed on each card
+- Timeline view option could be added later
+
+### Media Handling
+- **Photos**: Display in card, support click to expand
+- **Music**: Show album art, play/pause controls
+- **Videos**: Show thumbnail, play inline or modal
+- **Letters**: Show cover image on front, text on back
+
+---
+
+## Code Quality Standards
+
+### File Organization
+- Keep all code in a single HTML file for simplicity
+- CSS in `<style>` tag
+- JavaScript in `<script>` tag
+- Use clear section comments
+
+### JavaScript Structure
+- Use ES6+ syntax
+- Class-based architecture (`MemoryScrapbookApp` or similar)
+- Async/await for storage operations
+- Clear method names that describe functionality
+
+### Storage Pattern
+```javascript
+// Always use this pattern for storage:
+// Store with type prefix for organization
+await window.storage.set(`memory:${id}`, JSON.stringify(data));
+const result = await window.storage.get(`memory:${id}`);
+const memory = JSON.parse(result.value);
+
+// Load all memories
+const result = await window.storage.list('memory:');
+const memories = await Promise.all(
+  result.keys.map(async key => {
+    const data = await window.storage.get(key);
+    return JSON.parse(data.value);
+  })
+);
+
+// Sort chronologically (newest first)
+memories.sort((a, b) => new Date(b.date) - new Date(a.date));
+```
+
+### Auto-Save Behavior - CRITICAL REQUIREMENT
+
+**The app MUST auto-save immediately. No manual save buttons except in the creation modal.**
+
+#### When to Auto-Save:
+✅ **IMMEDIATELY** when user submits the creation form
+✅ **IMMEDIATELY** when user edits any memory (if edit feature is added)
+✅ **IMMEDIATELY** when user deletes any memory (if delete feature is added)
+
+#### Auto-Save Implementation:
+```javascript
+async saveMemory(memoryData) {
+  try {
+    // Generate unique ID if new memory
+    if (!memoryData.id) {
+      memoryData.id = 'memory_' + Date.now();
+    }
+    
+    // Save to storage immediately
+    await window.storage.set(`memory:${memoryData.id}`, JSON.stringify(memoryData));
+    
+    // Update in-memory array
+    const existingIndex = this.memories.findIndex(m => m.id === memoryData.id);
+    if (existingIndex >= 0) {
+      this.memories[existingIndex] = memoryData;
+    } else {
+      this.memories.push(memoryData);
+    }
+    
+    // Re-sort chronologically
+    this.memories.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    // Re-render to show changes
+    this.render();
+    
+    return true;
+  } catch (error) {
+    console.error('Auto-save failed:', error);
+    // Show user-friendly error
+    alert('Failed to save memory. Please try again.');
+    return false;
+  }
+}
+```
+
+#### Load on App Start:
+```javascript
+async init() {
+  // Load all memories from storage FIRST
+  await this.loadMemories();
+  
+  // Then setup UI
+  this.setupEventListeners();
+  this.render();
+}
+
+async loadMemories() {
+  try {
+    const result = await window.storage.list('memory:');
+    if (result && result.keys && result.keys.length > 0) {
+      const memoryPromises = result.keys.map(async key => {
+        const data = await window.storage.get(key);
+        return data ? JSON.parse(data.value) : null;
+      });
+      this.memories = (await Promise.all(memoryPromises)).filter(Boolean);
+      this.memories.sort((a, b) => new Date(b.date) - new Date(a.date));
+    } else {
+      // No saved memories, use empty array or demo data
+      this.memories = [];
+    }
+  } catch (error) {
+    console.error('Failed to load memories:', error);
+    this.memories = [];
+  }
+}
+```
+
+#### Data Persistence Rules:
+- **NEVER** use localStorage or sessionStorage
+- **ALWAYS** use `window.storage` API
+- **ALL** memories persist between sessions automatically
+- **NO** "Are you sure?" prompts for saves (auto-save is instant)
+- **YES** "Are you sure?" for deletes (destructive action)
+
+#### Error Handling:
+- Wrap ALL storage operations in try-catch
+- Log errors to console
+- Show user-friendly error messages
+- Don't crash the app if storage fails
+- Provide fallback to empty state if load fails
+
+### Error Handling
+- Wrap storage operations in try-catch
+- Provide fallback demo data
+- Console.log errors, don't alert unless critical
+- Handle missing images with onerror fallback
+
+---
+
+## What NOT to Do
+
+❌ **DO NOT** change the color scheme
+❌ **DO NOT** add new fonts
+❌ **DO NOT** introduce UI frameworks (Bootstrap, Material, etc.)
+❌ **DO NOT** change the overall aesthetic (romantic, soft, elegant)
+❌ **DO NOT** implement multiple features at once
+❌ **DO NOT** use different animation styles
+❌ **DO NOT** add features without asking first
+❌ **DO NOT** modify the 3D card transform logic without careful testing
+❌ **DO NOT** use localStorage or sessionStorage (use window.storage API)
+❌ **DO NOT** mix up the chronological ordering
+❌ **DO NOT** create separate storage patterns for different media types (use unified 'memory:' prefix)
+
+---
+
+## What TO Do
+
+✅ **ALWAYS** use the established CSS variables
+✅ **ALWAYS** maintain the romantic, elegant aesthetic
+✅ **ALWAYS** test on both desktop and mobile viewports
+✅ **ALWAYS** implement one feature at a time
+✅ **ALWAYS** ask for confirmation before proceeding
+✅ **ALWAYS** use the existing animation patterns
+✅ **ALWAYS** handle errors gracefully
+✅ **ALWAYS** use the window.storage API for persistence
+✅ **ALWAYS** maintain responsive design principles
+✅ **ALWAYS** keep code clean and well-commented
+✅ **ALWAYS** sort memories chronologically (newest first)
+✅ **ALWAYS** handle different media types gracefully
+✅ **ALWAYS** provide fallback for missing media (broken images, failed video loads, etc.)
+✅ **ALWAYS** auto-save immediately when memories are created/edited/deleted
+✅ **ALWAYS** load memories from storage on app initialization
+✅ **ALWAYS** wrap storage operations in try-catch blocks
+
+---
+
+## Mobile Breakpoint
+```css
+@media (max-width: 768px) {
+  /* Existing mobile styles - follow these patterns */
+}
+```
+
+---
+
+## When User Reports a Bug
+1. Ask for specific details about the issue
+2. Identify the exact component/function
+3. Fix ONLY that issue
+4. Test the fix
+5. Confirm with user before moving on
+
+---
+
+## Remember
+This is a personal, intimate scrapbook app for a couple to preserve and share memories together - letters, photos, music, videos. Every design choice should feel **warm, romantic, and timeless**. The aesthetic is **soft elegance**, not modern minimalism or bold maximalism.
+
+Think of it as a digital time capsule where every memory - whether it's a heartfelt letter, a photo from a special day, a song that means something, or a video clip - is treated with care and displayed beautifully.
+
+Build thoughtfully. Build slowly. Build beautifully.
