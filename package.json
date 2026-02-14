@@ -1,0 +1,27 @@
+{
+  "name": "louie-yeh-scrapbook",
+  "version": "1.0.0",
+  "description": "our scrapbook!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emuhlez/louie-yeh-scrapbook.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emuhlez/louie-yeh-scrapbook/issues"
+  },
+  "homepage": "https://github.com/emuhlez/louie-yeh-scrapbook#readme",
+  "dependencies": {
+    "gsap": "^3.14.2"
+  },
+  "devDependencies": {
+    "playwright": "^1.58.2",
+    "puppeteer": "^24.37.3"
+  }
+}

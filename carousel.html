@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GSAP Stacked Photo Carousel</title>
+    <style>
+      body { margin:0; background:#0b0d12; height:100vh; display:grid; place-items:center; font-family:system-ui; }
+      .wrap { 
+        width:min(900px,92vw); 
+        height:min(520px,70vh); 
+        position:relative;
+        perspective: 1200px;
+      }
+      .stage { 
+        position:absolute; 
+        inset:0; 
+        display:grid; 
+        place-items:center;
+        transform-style: preserve-3d;
+      }
+      /* 1) Clip on the OUTER card (the thing being transformed) */
+      .card {
+        position:absolute;
+        width: clamp(260px, 82vw, 560px);
+        aspect-ratio: 16/10;
+
+        border-radius: 18px;
+        overflow: hidden;                 /* move clipping here */
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+
+        /* force stable GPU layer */
+        transform: translateZ(0);
+        will-change: transform, opacity, filter;
+
+        /* webkit border-radius clipping fix */
+        -webkit-mask-image: -webkit-radial-gradient(white, black);
+
+        cursor: pointer;
+        transition: transform 0.15s ease;
+      }
+
+      .card:hover {
+        transform: translateZ(0) scale(1.02);
+      }
+
+      /* 2) Inner surface should NOT be the thing doing 3D clipping */
+      .print {
+        position: relative;
+        width:100%;
+        height:100%;
+        border-radius: 0;                 /* no radius here */
+        overflow: visible;                /* important */
+        transform: translateZ(0);
+        isolation: isolate;               /* prevents blend leakage between cards */
+
+        box-shadow: 0 18px 55px rgba(0,0,0,.55);
+      }
+
+      /* 3) Prevent image tearing */
+      .print img {
+        width:100%;
+        height:100%;
+        object-fit: cover;
+        display:block;
+
+        backface-visibility: hidden;
+        transform: translateZ(0) scale(1.02); /* translateZ(0) is key */
+      }
+      button {
+        position:absolute; top:50%; transform:translateY(-50%);
+        width:44px; height:44px; border-radius:999px;
+        border:1px solid rgba(255,255,255,.16);
+        background:rgba(255,255,255,.08);
+        color:#fff; cursor:pointer;
+      }
+      #prev { left:12px; }
+      #next { right:12px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="stage" id="stage"></div>
+
+      <button id="prev">←</button>
+      <button id="next">→</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+    <script>
+      const images = [
+        "https://images.unsplash.com/photo-1520975958225-1c2c77a1f52b?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1520975693415-35b3ad7a7f85?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1520975867597-bc52b82018a2?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1520975687190-3adf6f1f17a8?auto=format&fit=crop&w=1200&q=80",
+      ];
+
+      const stage = document.getElementById("stage");
+      const cards = images.map((src) => {
+        const el = document.createElement("div");
+        el.className = "card";
+        el.innerHTML = `
+          <div class="print">
+            <img src="${src}" alt="" draggable="false" />
+          </div>
+        `;
+        stage.appendChild(el);
+        return el;
+      });
+
+      let index = 0;
+      const wrap = (i) => (i % cards.length + cards.length) % cards.length;
+
+      // ---- tuning knobs ----
+      const STACK_VISIBLE = 5;     // how many behind the active you still show
+      const STACK_DX = 10;         // stack offset x
+      const STACK_DY = 8;          // stack offset y
+      const STACK_ROT = 0;         // NO rotation
+      const STACK_SCALE_STEP = 0.04;
+
+      const PEEK_X = 240;          // how far next/prev peek out
+      const PEEK_ROT = 0;          // NO rotation
+      const PEEK_SCALE = 0.92;
+      const PEEK_OPACITY = 0.85;
+
+      const DUR = 0.55;
+      let locked = false;
+
+      gsap.set(cards, { x: 0, y: 0, rotate: 0, scale: 1, opacity: 1 });
+      layout(true);
+
+      function layout(immediate = false) {
+        const tl = gsap.timeline({ defaults: { duration: immediate ? 0 : DUR, ease: "power3.out" } });
+
+        // We'll map each card to a "role": prev peek, active, next peek, or stack-behind
+        cards.forEach((card, i) => {
+          const rel = i - index;
+
+          // convert to shortest signed distance for nicer wrap behavior
+          const n = cards.length;
+          let d = ((rel % n) + n) % n;        // 0..n-1
+          if (d > n / 2) d -= n;              // -floor(n/2)..ceil(n/2)
+
+          const isActive = d === 0;
+          const isPrevPeek = d === -1;
+          const isNextPeek = d === 1;
+
+          // default: hide far cards
+          let x = 0, y = 0, r = 0, s = 0.9, o = 0, z = 0;
+
+          if (isActive) {
+            x = 0; y = 0; r = 0; s = 1; o = 1; z = 1000;
+          } else if (isPrevPeek) {
+            x = -PEEK_X; y = 18; r = 0; s = PEEK_SCALE; o = PEEK_OPACITY; z = 900;
+          } else if (isNextPeek) {
+            x = PEEK_X; y = 18; r = 0; s = PEEK_SCALE; o = PEEK_OPACITY; z = 900;
+          } else {
+            // put the rest behind as a stack (only show a few)
+            const step = Math.abs(d);
+            if (step <= STACK_VISIBLE) {
+              x = step * STACK_DX;
+              y = step * STACK_DY;
+              r = 0;
+              s = 1 - step * STACK_SCALE_STEP;
+              o = 0.55 - step * 0.08;
+              z = 800 - step;
+            }
+          }
+
+          tl.to(card, {
+            x, y, rotate: r, scale: s, opacity: o,
+            zIndex: z,
+          }, 0);
+        });
+      }
+
+      function bringToTop(card) {
+        // make sure it renders above all cards during the transition
+        gsap.set(card, { zIndex: 9999 });
+
+        // optional: subtle "pop" to read as coming forward
+        return gsap.to(card, {
+          z: 80,
+          scale: 1.04,
+          duration: 0.18,
+          ease: "power2.out",
+        });
+      }
+
+      function sendTopToBack() {
+        if (locked) return;
+        locked = true;
+
+        const card = cards[index];
+        const backDepth = Math.min(STACK_VISIBLE + 2, cards.length - 1);
+
+        // IMPORTANT: match these to your stack layout so it lands correctly
+        const BACK_DX = 6, BACK_DY = 6, BACK_ROT = 0, Z_STEP = 30;
+        const backPose = {
+          x: backDepth * BACK_DX,
+          y: backDepth * BACK_DY,
+          z: -(backDepth * Z_STEP),
+          rotateZ: backDepth * BACK_ROT,
+          scale: 1 - backDepth * 0.028,
+          opacity: 0.35
+        };
+
+        const LIFT_Y = -150;
+        const SLOT_Z_EXTRA = 180;
+
+        const tl = gsap.timeline({
+          defaults: { ease: "power2.inOut" },
+          onComplete: () => {
+            // Reorder the cards array - move current card to end
+            const movedCard = cards.splice(index, 1)[0];
+            cards.push(movedCard);
+            stage.appendChild(movedCard);
+
+            // Update index to next card (which is now at same position)
+            // No need to change index since we removed current and next is now at same index
+            
+            // snap to final pose + re-layout stack
+            gsap.set(movedCard, { ...backPose, zIndex: 0 });
+            layout(false);
+
+            locked = false;
+          }
+        });
+
+        tl.add(bringToTop(card))
+          // lift UP (feels like you grabbed the print)
+          .to(card, {
+            y: LIFT_Y,
+            z: SLOT_Z_EXTRA,
+            duration: 0.28
+          })
+          // slide to back position
+          .to(card, {
+            ...backPose,
+            duration: 0.35
+          });
+      }
+
+      function moveActiveToBack(clickedIndex) {
+        if (locked) return;
+        locked = true;
+
+        const card = cards[clickedIndex];
+
+        // First: bring it to top visually + also move it to front of the array/DOM
+        gsap.set(card, { zIndex: 9999 });
+        stage.appendChild(card);  // ensure it's last in DOM (on top)
+
+        // Make cards[0] be this card (so layout math stays simple)
+        cards.splice(clickedIndex, 1);
+        cards.unshift(card);
+
+        // Update index to 0 since we moved clicked card to front
+        index = 0;
+
+        // Re-layout immediately so everything else becomes "behind"
+        layout(true);
+
+        // Now run the same top->back motion
+        locked = false;
+        return sendTopToBack();
+      }
+
+      function go(dir) {
+        index = wrap(index + dir);
+        layout(false);
+      }
+
+      // Add click handlers to cards
+      cards.forEach((card, i) => {
+        card.addEventListener("click", () => {
+          if (locked) return;
+          
+          // Find current index of this card in the array
+          const currentIndex = cards.indexOf(card);
+          
+          if (currentIndex === index) {
+            // If clicking the active card, send it to back
+            sendTopToBack();
+          } else {
+            // If clicking another card, move it to front then to back
+            moveActiveToBack(currentIndex);
+          }
+        });
+      });
+
+      document.getElementById("prev").addEventListener("click", () => {
+        if (!locked) go(-1);
+      });
+      document.getElementById("next").addEventListener("click", () => {
+        if (!locked) go(1);
+      });
+      window.addEventListener("keydown", (e) => {
+        if (locked) return;
+        if (e.key === "ArrowLeft") go(-1);
+        if (e.key === "ArrowRight") sendTopToBack();
+      });
+    </script>
+  </body>
+</html>
