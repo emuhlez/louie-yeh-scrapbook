@@ -3,14 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Memory Scrapbook</title>
+  <title>Memory Scrapbook v2</title>
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- GSAP for smooth animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   
   <style>
+    /* Version 2.0 - Updated with analog film effects */
     /* ============================================
        CSS VARIABLES - STRICT COLOR PALETTE
        ============================================ */
@@ -150,31 +154,8 @@
     }
     
     /* ============================================
-       HEADER
+       HEADER - Removed
        ============================================ */
-    header {
-      text-align: center;
-      padding: 3rem 0;
-      animation: fadeInDown 0.8s ease;
-    }
-    
-    header h1 {
-      color: var(--text-primary);
-      margin-bottom: 0.5rem;
-    }
-    
-    header h1 img {
-      max-width: 400px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-    }
-    
-    header p {
-      color: var(--text-secondary);
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      font-weight: 300;
-    }
     
     /* ============================================
        BUTTONS
@@ -223,6 +204,7 @@
     main {
       min-height: 60vh;
       animation: fadeInUp 0.8s ease;
+      padding-top: 2rem;
     }
     
     /* ============================================
@@ -240,93 +222,103 @@
     }
     
     /* ============================================
-       VIEW CONTROLS
+       3D SCROLL VIEW - CAROUSEL STYLE
        ============================================ */
-    .view-controls {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      margin-bottom: 2rem;
-    }
-    
-    .view-controls button {
-      padding: 0.6rem 1.5rem;
-      font-size: 0.9rem;
-    }
-    
-    .view-controls button.active {
-      background: var(--accent-neutral);
-    }
-    
-    /* ============================================
-       GRID VIEW
-       ============================================ */
-    .grid-view {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 2rem;
-      animation: fadeIn 0.5s ease;
-    }
-    
-    .memory-card {
-      background: var(--bg-card);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px var(--shadow-soft);
-      transition: all 0.3s ease;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .memory-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 30px var(--shadow-medium);
-    }
-    
-    .memory-card-image {
+    .carousel-view {
       width: 100%;
-      height: 250px;
-      object-fit: cover;
-      background: var(--bg-card);
-    }
-    
-    .memory-card-content {
-      padding: 1.5rem;
-      flex: 1;
+      height: 85vh;
+      position: relative;
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: unset;
+      margin: 0 -2rem;
+      padding: 2rem;
+      perspective: 1200px;
     }
     
-    .memory-card-type {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--text-secondary);
-      margin-bottom: 0.5rem;
-      font-weight: 600;
+    .carousel-stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      perspective: 1200px;
+      background: transparent;
     }
     
-    .memory-card-title {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 0.5rem;
+    /* The ONLY thing that gets transform animations */
+    .carousel-card {
+      position: absolute;
+      width: clamp(220px, 45vw, 460px);
+      aspect-ratio: 3 / 4;
+      border-radius: 0;
+      overflow: hidden;
+      will-change: transform, opacity;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform-origin: 50% 50%;
+      
+      /* Critical: stable clipping + GPU */
+      transform: translate3d(0,0,0);
+      -webkit-mask-image: -webkit-radial-gradient(white, black); /* Safari/Chrome "triangle tear" fix */
+      
+      border: none;
+      outline: none;
     }
     
-    .memory-card-caption {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      margin-top: 0.5rem;
-      line-height: 1.5;
+    /* Inner should NOT be 3D or clipped */
+    .print {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      overflow: visible;
+      transform: translateZ(0);
+      isolation: isolate;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
     }
     
-    .memory-card-date {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      margin-top: auto;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(45, 37, 32, 0.1);
+    .print img,
+    .print video {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      border-radius:0;
+      border: none;
+      outline: none;
+    }
+    
+    /* Effect layers for realistic photo feel */
+    .paper, .sheen, .bend, .curl, .dust {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+    
+    /* Blend modes - prevent leaking across layers when compositing */
+    .paper, .bend, .curl, .dust { 
+      mix-blend-mode: normal; 
+    }
+    
+    .sheen { 
+      mix-blend-mode: screen; 
+      background: linear-gradient(135deg, 
+        transparent 0%, 
+        rgba(255,255,255,0.03) 30%, 
+        rgba(255,255,255,0.08) 50%, 
+        rgba(255,255,255,0.03) 70%, 
+        transparent 100%
+      );
+      opacity: 0.6;
+    }
+    
+    .paper {
+      background: rgba(255,255,255,0.015);
     }
     
     /* Placeholder for content */
@@ -524,13 +516,25 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: linear-gradient(135deg, #faf8f5 0%, #f5f0e8 100%);
+      background: linear-gradient(135deg, #fdfcfb 0%, #f7f5f2 50%, #fdfcfb 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 2000;
       overflow: hidden;
       transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .landing-page::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120%;
+      height: 120%;
+      background: radial-gradient(circle, transparent 0%, rgba(0,0,0,0.02) 100%);
+      pointer-events: none;
     }
     
     .landing-page.hidden {
@@ -545,7 +549,7 @@
       z-index: 10;
       position: relative;
       padding: 2rem;
-      transition: all 0.3s ease;
+      transition: all 0.5s ease;
       user-select: none;
       max-width: 90%;
       width: auto;
@@ -553,6 +557,18 @@
       flex-direction: column;
       align-items: center;
       gap: 0.5rem;
+      animation: landingTitleFadeIn 1s ease forwards;
+    }
+    
+    @keyframes landingTitleFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     
     .landing-title-main {
@@ -586,6 +602,7 @@
       height: 100vh;
       pointer-events: none;
       overflow: hidden;
+      perspective: 1200px;
     }
     
     .photo-stream-item {
@@ -595,6 +612,8 @@
       will-change: transform;
       pointer-events: auto;
       cursor: pointer;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
     }
     
     .stream-photo {
@@ -606,6 +625,9 @@
       opacity: 1;
       display: block;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: transparent;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
     }
     
     .photo-stream-item:hover .stream-photo {
@@ -623,6 +645,11 @@
       }
     }
     
+    /* Minimal fade animation */
+    .photo-stream-item.fade-out {
+      transition: opacity 1.2s ease, transform 1.2s ease;
+    }
+    
     /* ============================================
        MOBILE RESPONSIVENESS
        ============================================ */
@@ -631,27 +658,9 @@
         padding: 1rem;
       }
       
-      header {
-        padding: 2rem 0;
-      }
-      
       button {
         padding: 0.7rem 1.5rem;
         font-size: 0.9rem;
-      }
-      
-      .grid-view {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
-      
-      .view-controls {
-        flex-direction: column;
-        gap: 0.75rem;
-      }
-      
-      .view-controls button {
-        width: 100%;
       }
       
       .memory-type-selector {
@@ -684,9 +693,17 @@
         margin-left: 40px;
       }
       
-      header h1 img {
-        max-width: 300px;
+      /* Carousel view mobile adjustments */
+      .carousel-view {
+        height: 75vh;
+        margin: 0 -1rem;
+        padding: 1rem;
       }
+      
+      .carousel-card {
+        width: clamp(200px, 65vw, 360px);
+      }
+      
     }
   </style>
 </head>
@@ -703,19 +720,10 @@
   </div>
   
   <div class="container">
-    <header>
-      <h1><img src="title/nate-emily-goose.svg" alt="nate + emily + goose's scrapbook"></h1>
-      <p>A collection of moments we cherish together</p>
-    </header>
     
     <main>
       <div class="action-bar">
         <button class="create-memory-btn" id="createMemoryBtn">+ Create Memory</button>
-      </div>
-      
-      <div class="view-controls">
-        <button class="view-btn active" data-view="grid">Grid View</button>
-        <button class="view-btn" data-view="scroll">3D Scroll View</button>
       </div>
       
       <div id="app-content">
@@ -813,86 +821,369 @@
     class MemoryScrapbookApp {
       constructor() {
         this.memories = [];
-        this.currentView = 'grid';
-        this.currentScrollIndex = 0;
         this.landingActive = true;
+        this.carouselIndex = 0;
+        this.carouselLocked = false;
+        this.carouselCards = [];
+        this.carouselInitialized = false;
+        this.lastMovedCard = null;
+        this.isTransitioning = false;
         
         this.init();
       }
       
       async init() {
+        console.log('=== APP INIT START ===');
+        
         // Load memories from storage FIRST
+        console.log('Loading memories...');
         await this.loadMemories();
+        console.log(`Loaded ${this.memories.length} memories`);
         
         // Setup photo stream on landing page
-        this.setupPhotoStream();
+        console.log('Setting up photo stream...');
+        await this.setupPhotoStream();
         
         // Setup event listeners
+        console.log('Setting up event listeners...');
         this.setupEventListeners();
         
+        console.log('=== APP INIT COMPLETE ===');
         // Don't render main content until landing is dismissed
       }
       
       async loadMemories() {
+        console.log('🔄 Starting to load memories...');
+        
+        // Always load demo data first (all photos from directory)
+        await this.loadDemoData();
+        console.log(`✅ Demo data loaded: ${this.memories.length} items`);
+        
+        // Then try to load any user-created memories from storage
         try {
           const result = await window.storage.list('memory:');
           if (result && result.keys && result.keys.length > 0) {
+            console.log(`📦 Found ${result.keys.length} saved memories in storage`);
             const memoryPromises = result.keys.map(async key => {
               const data = await window.storage.get(key);
               return data ? JSON.parse(data.value) : null;
             });
-            this.memories = (await Promise.all(memoryPromises)).filter(Boolean);
+            const savedMemories = (await Promise.all(memoryPromises)).filter(Boolean);
+            
+            // Merge saved memories with demo data
+            this.memories = [...savedMemories, ...this.memories];
             this.memories.sort((a, b) => new Date(b.date) - new Date(a.date));
-            console.log(`Loaded ${this.memories.length} memories from storage`);
-          } else {
-            // No saved memories, use demo data
-            console.log('No saved memories found, loading demo data');
-            this.loadDemoData();
+            console.log(`✅ Total memories after merging: ${this.memories.length}`);
           }
         } catch (error) {
-          console.error('Failed to load memories:', error);
-          // Fallback to demo data
-          this.loadDemoData();
+          console.warn('Storage not available, using only photo data:', error);
         }
       }
       
-      loadDemoData() {
-        // Demo memories to showcase the grid
-        this.memories = [
-          {
-            id: 'memory_1',
-            type: 'letter',
-            date: '2024-02-10',
-            title: 'First Letter',
-            content: 'This is a beautiful letter filled with thoughts and memories...',
-            caption: 'A heartfelt message'
-          },
-          {
-            id: 'memory_2',
-            type: 'photo',
-            date: '2024-02-08',
-            title: 'Sunset Together',
-            content: 'https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=400',
-            caption: 'The most beautiful sunset we watched together'
-          },
-          {
-            id: 'memory_3',
-            type: 'video',
-            date: '2024-01-28',
-            title: 'Birthday Celebration',
-            content: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            caption: 'Your special day'
+      async loadDemoData() {
+        // Load metadata JSON file - this contains all files with their dates
+        let photoMetadata = {};
+        
+        try {
+          const response = await fetch('photo-metadata.json');
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
           }
-        ];
+          photoMetadata = await response.json();
+          console.log(`📅 Loaded metadata for ${Object.keys(photoMetadata).length} files`);
+        } catch (error) {
+          console.error('❌ Could not load photo metadata:', error);
+          console.log('Using generated fallback list...');
+          photoMetadata = this.getGeneratedFallbackList();
+        }
+        
+        if (Object.keys(photoMetadata).length === 0) {
+          console.error('❌ No photos found in metadata or fallback!');
+          return;
+        }
+        
+        // Dynamically load all files from metadata
+        this.memories = [];
+        let photoCount = 0;
+        let videoCount = 0;
+        
+        console.log(`📂 Processing ${Object.keys(photoMetadata).length} files from metadata...`);
+        
+        Object.entries(photoMetadata).forEach(([filename, date], index) => {
+          const isVideo = filename.toLowerCase().endsWith('.mov') || filename.toLowerCase().endsWith('.mp4');
+          const type = isVideo ? 'video' : 'photo';
+          
+          if (isVideo) {
+            videoCount++;
+          } else {
+            photoCount++;
+          }
+          
+          const memory = {
+            id: `${type}_${index}`,
+            type: type,
+            date: date || '2024-01-01',
+            title: filename.replace(/\.[^/.]+$/, '').replace(/_/g, ' '),
+            content: `photos/${filename}`,
+            caption: ''
+          };
+          
+          this.memories.push(memory);
+          
+          // Log first few items for debugging
+          if (index < 3) {
+            console.log(`  ➜ Added: ${filename} (${type}, ${date})`);
+          }
+        });
         
         // Sort chronologically (newest first)
         this.memories.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        console.log(`📸 Successfully loaded ${photoCount} photos and ${videoCount} videos`);
+        console.log(`📊 Total memories in array: ${this.memories.length}`);
       }
       
-      setupPhotoStream() {
+      getGeneratedFallbackList() {
+        // Auto-generated list of all current files
+        const currentFiles = {
+          "001_Original.jpg": "2026-01-02",
+          "016_Original.jpg": "2026-01-03",
+          "017_Original.jpg": "2026-01-03",
+          "024_Original.jpg": "2026-01-03",
+          "027_Original.jpg": "2026-01-03",
+          "055_Original.jpg": "2026-01-03",
+          "071_Original.jpg": "2026-01-03",
+          "114_Original.jpg": "2026-01-03",
+          "121_Original.jpg": "2026-01-03",
+          "142_Original.jpg": "2026-01-03",
+          "196_Original.jpg": "2026-01-03",
+          "211_Original.jpg": "2026-01-03",
+          "A20926B7-DE97-4E84-AB81-0748BE55DBDA.JPG": "2025-01-25",
+          "CIMG9720.jpg": "2025-04-12",
+          "IMG_0028.MOV": "2026-01-16",
+          "IMG_0043.JPG": "2026-01-15",
+          "IMG_0053.jpeg": "2025-01-12",
+          "IMG_0184.jpeg": "2026-02-07",
+          "IMG_0485.JPG": "2026-01-18",
+          "IMG_0488.jpeg": "2026-01-19",
+          "IMG_0526.jpeg": "2025-02-05",
+          "IMG_0536.jpeg": "2025-02-06",
+          "IMG_0808.jpeg": "2025-02-15",
+          "IMG_0890.jpeg": "2025-02-18",
+          "IMG_1002.jpeg": "2026-02-09",
+          "IMG_1011.JPG": "2025-02-21",
+          "IMG_1031.jpeg": "2026-02-11",
+          "IMG_1053.jpeg": "2026-02-12",
+          "IMG_1375.jpeg": "2025-03-06",
+          "IMG_1452.jpeg": "2025-03-08",
+          "IMG_1469.jpeg": "2025-03-08",
+          "IMG_1585.jpeg": "2025-03-16",
+          "IMG_1624.jpeg": "2025-03-21",
+          "IMG_1645.jpeg": "2024-11-25",
+          "IMG_1651.jpeg": "2024-11-25",
+          "IMG_1657.jpeg": "2026-02-13",
+          "IMG_1684.jpeg": "2025-03-23",
+          "IMG_2163.jpeg": "2025-03-25",
+          "IMG_2205.MOV": "2025-03-28",
+          "IMG_2449.jpeg": "2025-04-13",
+          "IMG_2953.jpeg": "2025-01-01",
+          "IMG_2978.jpeg": "2024-11-02",
+          "IMG_2979 2.jpeg": "2025-04-13",
+          "IMG_2979.jpeg": "2024-11-02",
+          "IMG_3013.jpeg": "2025-04-13",
+          "IMG_3064.jpeg": "2025-04-14",
+          "IMG_3082 2.jpeg": "2025-04-14",
+          "IMG_3126.jpeg": "2025-04-14",
+          "IMG_3149.jpeg": "2025-04-14",
+          "IMG_3261.jpeg": "2025-04-15",
+          "IMG_3263.jpeg": "2025-04-15",
+          "IMG_3267.jpeg": "2025-04-15",
+          "IMG_3324.JPG": "2025-04-22",
+          "IMG_3384.JPG": "2025-04-22",
+          "IMG_3522.jpeg": "2025-04-24",
+          "IMG_3570.jpeg": "2025-04-25",
+          "IMG_3583.jpeg": "2025-04-25",
+          "IMG_3631.jpeg": "2025-04-26",
+          "IMG_3668.jpeg": "2025-04-27",
+          "IMG_4003.jpeg": "2025-05-01",
+          "IMG_4053.jpeg": "2025-05-03",
+          "IMG_4064.jpeg": "2025-05-03",
+          "IMG_4146.jpeg": "2025-05-06",
+          "IMG_4246 2.jpeg": "2025-05-09",
+          "IMG_4289.jpeg": "2025-05-10",
+          "IMG_4310.jpeg": "2025-05-11",
+          "IMG_4430.jpeg": "2025-05-17",
+          "IMG_4443.jpeg": "2025-05-17",
+          "IMG_4533.MOV": "2025-06-07",
+          "IMG_4652.jpeg": "2025-06-13",
+          "IMG_4682.jpeg": "2025-06-15",
+          "IMG_4699.jpeg": "2025-06-15",
+          "IMG_5014.JPG": "2025-06-07",
+          "IMG_5055.jpeg": "2025-06-21",
+          "IMG_5101.jpeg": "2025-06-22",
+          "IMG_5116.jpeg": "2025-06-22",
+          "IMG_5209.jpeg": "2025-06-25",
+          "IMG_5222.jpeg": "2025-06-26",
+          "IMG_5274.jpeg": "2025-06-27",
+          "IMG_5353.jpeg": "2025-07-01",
+          "IMG_5379.jpeg": "2025-07-01",
+          "IMG_5783.jpeg": "2025-07-13",
+          "IMG_5840.jpeg": "2025-07-16",
+          "IMG_5899.jpeg": "2025-07-19",
+          "IMG_6006.jpeg": "2025-07-23",
+          "IMG_6307.jpeg": "2025-08-12",
+          "IMG_6349.jpeg": "2025-08-15",
+          "IMG_6396.jpeg": "2025-08-18",
+          "IMG_6397.MOV": "2025-09-12",
+          "IMG_6646.jpeg": "2025-09-13",
+          "IMG_6648.jpeg": "2025-09-13",
+          "IMG_6789.jpeg": "2025-09-17",
+          "IMG_6825.jpeg": "2025-09-19",
+          "IMG_6844.jpeg": "2025-09-20",
+          "IMG_6957.jpeg": "2025-09-24",
+          "IMG_6957 2.jpeg": "2025-09-24",
+          "IMG_7043.jpeg": "2025-09-28",
+          "IMG_7051.jpeg": "2025-09-29",
+          "IMG_7064.jpeg": "2025-09-30",
+          "IMG_7146.jpeg": "2025-10-04",
+          "IMG_7308.jpeg": "2025-10-11",
+          "IMG_7435.jpg": "2025-11-08",
+          "IMG_7506.jpeg": "2025-10-25",
+          "IMG_7535.jpeg": "2025-10-27",
+          "IMG_7600.jpeg": "2025-10-31",
+          "IMG_7687.jpeg": "2025-11-04",
+          "IMG_7718.jpeg": "2025-11-06",
+          "IMG_7734.jpeg": "2025-11-07",
+          "IMG_7791.jpeg": "2025-11-09",
+          "IMG_7824.jpeg": "2025-11-11",
+          "IMG_7827.JPG": "2025-11-17",
+          "IMG_8316.jpeg": "2025-11-27",
+          "IMG_8346.jpg": "2025-12-13",
+          "IMG_8389.jpeg": "2025-11-30",
+          "IMG_8468.jpeg": "2025-12-03",
+          "IMG_8548.jpeg": "2025-12-06",
+          "IMG_8553.jpeg": "2025-12-06",
+          "IMG_8561.jpeg": "2025-12-07",
+          "IMG_8583.MOV": "2025-12-14",
+          "IMG_8626.JPG": "2025-12-17",
+          "IMG_8627.JPG": "2025-12-17",
+          "IMG_8628.JPG": "2025-12-17",
+          "IMG_8634.JPG": "2025-12-17",
+          "IMG_8636.JPG": "2025-12-17",
+          "IMG_8690.jpeg": "2025-12-09",
+          "IMG_8701.jpeg": "2025-12-09",
+          "IMG_8746.jpeg": "2025-12-11",
+          "IMG_8821.jpeg": "2025-12-14",
+          "IMG_8823.jpeg": "2025-12-14",
+          "IMG_8849.jpeg": "2025-12-15",
+          "IMG_8860.JPG": "2025-12-07",
+          "IMG_8897.jpeg": "2025-12-18",
+          "IMG_8901.jpeg": "2025-12-18",
+          "IMG_8908.jpeg": "2025-12-19",
+          "IMG_8926.jpeg": "2025-12-19",
+          "IMG_8952.jpeg": "2025-12-20",
+          "IMG_8976.MOV": "2025-12-25",
+          "IMG_8995.JPG": "2026-01-14",
+          "IMG_9014.jpeg": "2025-12-21",
+          "IMG_9021.jpeg": "2025-12-21",
+          "IMG_9033.jpeg": "2025-12-22",
+          "IMG_9036.jpeg": "2025-12-22",
+          "IMG_9057.jpeg": "2025-12-23",
+          "IMG_9090.jpeg": "2025-12-24",
+          "IMG_9111.jpeg": "2025-12-25",
+          "IMG_9122.jpeg": "2025-12-26",
+          "IMG_9187.jpeg": "2025-12-28",
+          "IMG_9229.jpeg": "2025-12-30",
+          "IMG_9257.jpeg": "2025-12-31",
+          "IMG_9294.jpeg": "2026-01-01",
+          "IMG_9303.JPG": "2026-01-17",
+          "IMG_9309.jpeg": "2026-01-01",
+          "IMG_9317.MOV": "2026-01-01",
+          "IMG_9340.jpeg": "2026-01-02",
+          "IMG_9356.jpeg": "2026-01-02",
+          "IMG_9378.jpeg": "2026-01-03",
+          "IMG_9442.JPG": "2026-01-18",
+          "IMG_9459.JPG": "2026-01-18",
+          "IMG_9880.jpeg": "2026-01-11",
+          "IMG_9925.jpeg": "2026-01-13",
+          "IMG_9933.jpg": "2025-01-10",
+          "IMG_9989.jpeg": "2026-01-14",
+          "ScreenRecording_06-20-2025 21-16-11_1.mov": "2025-06-21",
+          "Video Nov 08 2025, 5 12 28 PM.MOV": "2025-11-09",
+          "Video Nov 08 2025, 7 45 13 PM.MOV": "2025-11-09"
+        };
+        return currentFiles;
+      }
+      
+      getFallbackPhotoList() {
+        // Fallback list with estimated dates
+        const fallbackFiles = {};
+        const photoFiles = [
+          '001_Original.jpg', '016_Original.jpg', '017_Original.jpg', '024_Original.jpg',
+          '027_Original.jpg', '055_Original.jpg', '071_Original.jpg', '114_Original.jpg',
+          '121_Original.jpg', '142_Original.jpg', '196_Original.jpg', '211_Original.jpg',
+          'A20926B7-DE97-4E84-AB81-0748BE55DBDA.JPG', 'CIMG9720.jpg',
+          'IMG_0043.JPG', 'IMG_0485.JPG', 'IMG_1011.JPG', 'IMG_3324.JPG',
+          'IMG_3384.JPG', 'IMG_5014.JPG', 'IMG_7435.jpg', 'IMG_7827.JPG',
+          'IMG_8346.jpg', 'IMG_8626.JPG', 'IMG_8627.JPG', 'IMG_8628.JPG',
+          'IMG_8634.JPG', 'IMG_8636.JPG', 'IMG_8860.JPG', 'IMG_8995.JPG',
+          'IMG_9303.JPG', 'IMG_9442.JPG', 'IMG_9459.JPG', 'IMG_9933.jpg',
+          'IMG_6455.PNG', 'IMG_7731.PNG',
+          'IMG_0053.jpg', 'IMG_0184.jpg', 'IMG_0488.jpg', 'IMG_0526.jpg',
+          'IMG_0536.jpg', 'IMG_0808.jpg', 'IMG_0890.jpg', 'IMG_1002.jpg',
+          'IMG_1031.jpg', 'IMG_1053.jpg', 'IMG_1375.jpg', 'IMG_1452.jpg',
+          'IMG_1469.jpg', 'IMG_1585.jpg', 'IMG_1624.jpg', 'IMG_1645.jpg',
+          'IMG_1651.jpg', 'IMG_1657.jpg', 'IMG_1684.jpg', 'IMG_2163.jpg',
+          'IMG_2449.jpg', 'IMG_2953.jpg', 'IMG_2978.jpg', 'IMG_2979 2.jpg',
+          'IMG_2979.jpg', 'IMG_3013.jpg', 'IMG_3064.jpg', 'IMG_3082 2.jpg',
+          'IMG_3126.jpg', 'IMG_3149.jpg', 'IMG_3261.jpg', 'IMG_3263.jpg',
+          'IMG_3267.jpg', 'IMG_3522.jpg', 'IMG_3570.jpg', 'IMG_3583.jpg',
+          'IMG_3631.jpg', 'IMG_3668.jpg', 'IMG_4003.jpg', 'IMG_4053.jpg',
+          'IMG_4064.jpg', 'IMG_4146.jpg', 'IMG_4246 2.jpg', 'IMG_4289.jpg',
+          'IMG_4310.jpg', 'IMG_4430.jpg', 'IMG_4443.jpg', 'IMG_4652.jpg',
+          'IMG_4682.jpg', 'IMG_4699.jpg', 'IMG_5055.jpg', 'IMG_5101.jpg',
+          'IMG_5116.jpg', 'IMG_5209.jpg', 'IMG_5222.jpg', 'IMG_5274.jpg',
+          'IMG_5353.jpg', 'IMG_5379.jpg', 'IMG_5783.jpg', 'IMG_5840.jpg',
+          'IMG_5899.jpg', 'IMG_6006.jpg', 'IMG_6307.jpg', 'IMG_6349.jpg',
+          'IMG_6396.jpg', 'IMG_6646.jpg', 'IMG_6648.jpg', 'IMG_6789.jpg',
+          'IMG_6825.jpg', 'IMG_6844.jpg', 'IMG_6957.jpg', 'IMG_7043.jpg',
+          'IMG_7051.jpg', 'IMG_7064.jpg', 'IMG_7146.jpg', 'IMG_7308.jpg',
+          'IMG_7506.jpg', 'IMG_7535.jpg', 'IMG_7600.jpg', 'IMG_7687.jpg',
+          'IMG_7718.jpg', 'IMG_7734.jpg', 'IMG_7791.jpg', 'IMG_7824.jpg',
+          'IMG_8316.jpg', 'IMG_8389.jpg', 'IMG_8468.jpg', 'IMG_8548.jpg',
+          'IMG_8553.jpg', 'IMG_8561.jpg', 'IMG_8690.jpg', 'IMG_8701.jpg',
+          'IMG_8746.jpg', 'IMG_8821.jpg', 'IMG_8823.jpg', 'IMG_8849.jpg',
+          'IMG_8897.jpg', 'IMG_8901.jpg', 'IMG_8908.jpg', 'IMG_8926.jpg',
+          'IMG_8952.jpg', 'IMG_9014.jpg', 'IMG_9021.jpg', 'IMG_9033.jpg',
+          'IMG_9036.jpg', 'IMG_9057.jpg', 'IMG_9090.jpg', 'IMG_9111.jpg',
+          'IMG_9122.jpg', 'IMG_9187.jpg', 'IMG_9229.jpg', 'IMG_9257.jpg',
+          'IMG_9294.jpg', 'IMG_9309.jpg', 'IMG_9340.jpg', 'IMG_9356.jpg',
+          'IMG_9378.jpg', 'IMG_9880.jpg', 'IMG_9925.jpg', 'IMG_9989.jpg'
+        ];
+        
+        const videoFiles = [
+          'IMG_0028.MOV', 'IMG_2205.MOV', 'IMG_4533.MOV', 'IMG_6397.MOV',
+          'IMG_8583.MOV', 'IMG_8976.MOV', 'IMG_9317.MOV',
+          'ScreenRecording_06-20-2025 21-16-11_1.mov',
+          'Video Nov 08 2025, 5 12 28 PM.MOV',
+          'Video Nov 08 2025, 7 45 13 PM.MOV'
+        ];
+        
+        photoFiles.forEach(file => {
+          fallbackFiles[file] = '2026-01-01';
+        });
+        
+        videoFiles.forEach(file => {
+          fallbackFiles[file] = '2026-01-01';
+        });
+        
+        return fallbackFiles;
+      }
+      
+      async setupPhotoStream() {
         const photoStreamContainer = document.getElementById('photoStream');
         
-        // Use all photos from landing page photos directory
+        // Use photos specifically from the landing page photos directory
         const landingPagePhotos = [
           'landing page photos/001_Original.jpg',
           'landing page photos/027_Original.jpg',
@@ -900,22 +1191,24 @@
           'landing page photos/211_Original.jpg',
           'landing page photos/CIMG9720.jpg',
           'landing page photos/IMG_0485.JPG',
-          'landing page photos/IMG_0488.HEIC',
-          'landing page photos/IMG_0526.HEIC',
-          'landing page photos/IMG_1651.HEIC',
-          'landing page photos/IMG_1684.HEIC',
-          'landing page photos/IMG_2449.HEIC',
-          'landing page photos/IMG_3149.HEIC',
+          'landing page photos/IMG_0488.jpeg',
+          'landing page photos/IMG_0526.jpeg',
+          'landing page photos/IMG_1651.jpeg',
+          'landing page photos/IMG_1684.jpeg',
+          'landing page photos/IMG_2449.jpeg',
+          'landing page photos/IMG_3149.jpeg',
           'landing page photos/IMG_3324.JPG',
-          'landing page photos/IMG_3522.HEIC',
-          'landing page photos/IMG_3583.HEIC',
-          'landing page photos/IMG_4064.HEIC',
-          'landing page photos/IMG_6957.HEIC',
-          'landing page photos/IMG_8901.heic',
-          'landing page photos/IMG_9090.HEIC',
-          'landing page photos/IMG_9229.HEIC',
+          'landing page photos/IMG_3522.jpeg',
+          'landing page photos/IMG_3583.jpeg',
+          'landing page photos/IMG_4064.jpeg',
+          'landing page photos/IMG_6957.jpeg',
+          'landing page photos/IMG_8901.jpeg',
+          'landing page photos/IMG_9090.jpeg',
+          'landing page photos/IMG_9229.jpeg',
           'landing page photos/IMG_9933.jpg'
         ];
+        
+        console.log(`🎬 Loading ${landingPagePhotos.length} photos from landing page photos directory`);
         
         // Randomize the photo order using Fisher-Yates shuffle
         const shuffleArray = (array) => {
@@ -929,33 +1222,32 @@
         
         const randomizedPhotos = shuffleArray(landingPagePhotos);
         
-        // Calculate even spacing for photos to avoid overlap
+        // Simple randomized layout centered around text
         const totalPhotos = randomizedPhotos.length;
-        const verticalSpacing = 60 / totalPhotos; // Divide middle 60% of screen for better spread
         
-        // Create photos with proper spacing - NO DUPLICATES
+        // Create photos with simple random positions
         randomizedPhotos.forEach((photoUrl, index) => {
           const container = document.createElement('div');
           container.className = 'photo-stream-item';
           
-          // Evenly distribute vertically to prevent overlap
-          const basePosition = 15 + (index * verticalSpacing);
-          const randomOffset = (Math.random() - 0.5) * 2; // Minimal random variation to avoid collision
+          // Random position in the middle of screen (centered around text)
+          const basePosition = 15 + (index * (60 / totalPhotos));
+          const randomOffset = (Math.random() - 0.5) * 10;
           const topPosition = basePosition + randomOffset;
           container.style.top = `${topPosition}%`;
           
           // Start from right side of screen (off-screen)
           container.style.left = '100vw';
           
-          // Varied animation speeds (slower)
+          // Varied animation speeds
           const duration = 18 + (index % 3) * 4; // 18, 22, or 26 seconds
           container.style.animationDuration = `${duration}s`;
           
-          // Staggered start times for continuous flow - smaller gaps to fill empty spaces
-          const delay = -(index * 1.2); // Stagger by 1.2 seconds each for tighter spacing
+          // Staggered start times
+          const delay = -(index * 1.2);
           container.style.animationDelay = `${delay}s`;
           
-          // Alternate z-index for layering
+          // Alternate z-index
           const zIndex = index % 2 === 0 ? 15 : 5;
           container.style.zIndex = zIndex;
           
@@ -963,37 +1255,92 @@
           img.src = photoUrl;
           img.alt = 'Memory photo';
           img.className = 'stream-photo';
-          img.onerror = () => img.style.display = 'none';
+          
+          // Initialize with GSAP for clean rendering (immediate)
+          gsap.set(container, { 
+            x: 0, 
+            y: 0, 
+            z: 0, 
+            rotateY: 0, 
+            rotateZ: 0, 
+            scale: 1, 
+            opacity: 0,
+            force3D: true
+          });
+          
+          let imageLoaded = false;
+          img.onload = () => {
+            imageLoaded = true;
+            // Animate in when loaded
+            gsap.to(container, {
+              opacity: 1,
+              duration: 0.5,
+              ease: "power2.out"
+            });
+            console.log(`✅ Loaded: ${photoUrl}`);
+            console.log(`   Dimensions: ${img.naturalWidth} x ${img.naturalHeight}`);
+          };
+          img.onerror = () => {
+            console.error(`❌ Failed to load: ${photoUrl}`);
+            container.style.display = 'none';
+          };
           
           container.appendChild(img);
           photoStreamContainer.appendChild(container);
+          
+          // Debug: log after 1 second if image loaded
+          setTimeout(() => {
+            if (!imageLoaded) {
+              console.warn(`⏳ Still loading after 1s: ${photoUrl}`);
+            }
+          }, 1000);
         });
       }
       
       enterScrapbook() {
         this.landingActive = false;
-        const landingPage = document.getElementById('landingPage');
-        landingPage.classList.add('hidden');
         
-        // Render main content after transition
+        // Trigger the circular shuffle animation
+        this.triggerCircularShuffleAnimation();
+      }
+      
+      triggerCircularShuffleAnimation() {
+        const landingPage = document.getElementById('landingPage');
+        const landingTitle = document.getElementById('landingTitle');
+        const photoStreamItems = document.querySelectorAll('.photo-stream-item');
+        
+        // Fade out title
+        landingTitle.style.transition = 'opacity 0.8s ease';
+        landingTitle.style.opacity = '0';
+        
+        // Fade out all photos with a gentle scale effect
+        photoStreamItems.forEach((item, index) => {
+          item.classList.add('fade-out');
+          
+          // Stagger slightly for elegance
+          setTimeout(() => {
+            item.style.opacity = '0';
+            item.style.transform = 'scale(0.8)';
+          }, index * 30);
+        });
+        
+        // Fade out landing page
         setTimeout(() => {
+          landingPage.style.transition = 'opacity 0.8s ease';
+          landingPage.style.opacity = '0';
+        }, 800);
+        
+        // Hide landing page and show main content
+        setTimeout(() => {
+          landingPage.classList.add('hidden');
           this.render();
-        }, 100);
+        }, 1800);
       }
       
       setupEventListeners() {
         // Landing page title click
         document.getElementById('landingTitle').addEventListener('click', () => {
           this.enterScrapbook();
-        });
-        
-        // View switching buttons
-        const viewButtons = document.querySelectorAll('.view-btn');
-        viewButtons.forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            const view = e.target.dataset.view;
-            this.switchView(view);
-          });
         });
         
         // Create memory button
@@ -1027,18 +1374,6 @@
           e.preventDefault();
           await this.handleCreateMemory(e);
         });
-      }
-      
-      switchView(view) {
-        this.currentView = view;
-        
-        // Update active button
-        document.querySelectorAll('.view-btn').forEach(btn => {
-          btn.classList.toggle('active', btn.dataset.view === view);
-        });
-        
-        // Re-render
-        this.render();
       }
       
       openCreateModal() {
@@ -1147,58 +1482,636 @@
       }
       
       render() {
-        const contentContainer = document.getElementById('app-content');
+        console.log('=== RENDER START ===');
+        console.log(`Memories count: ${this.memories.length}`);
         
-        if (this.currentView === 'grid') {
-          contentContainer.innerHTML = this.renderGridView();
-        } else {
-          contentContainer.innerHTML = '<div class="content-placeholder"><p>3D Scroll View coming soon...</p></div>';
+        const contentContainer = document.getElementById('app-content');
+        if (!contentContainer) {
+          console.error('ERROR: app-content container not found!');
+          return;
         }
+        
+        console.log('Rendering carousel view');
+        contentContainer.innerHTML = this.renderCarouselView();
+        setTimeout(() => {
+          this.setupCarousel();
+        }, 100);
+        
+        console.log('=== RENDER COMPLETE ===');
       }
       
-      renderGridView() {
+      renderCarouselView() {
         if (this.memories.length === 0) {
           return '<div class="content-placeholder"><p>No memories yet. Create your first one!</p></div>';
         }
         
-        const cardsHTML = this.memories.map(memory => {
-          const formattedDate = new Date(memory.date).toLocaleDateString('en-US', {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric'
-          });
-          
-          // For photos and videos, use content as image URL
-          // For letters, show gradient placeholder
-          let imageDisplay = '';
-          if (memory.type === 'photo' && memory.content) {
-            imageDisplay = `<img src="${memory.content}" alt="${memory.title}" class="memory-card-image" onerror="this.style.display='none'">`;
-          } else if (memory.type === 'video' && memory.content) {
-            // For videos, try to get a thumbnail or show a gradient
-            imageDisplay = '<div class="memory-card-image"></div>';
+        return `
+          <div class="carousel-view">
+            <div class="carousel-stage" id="carouselStage"></div>
+          </div>
+        `;
+      }
+      
+      setupCarousel() {
+        console.log('=== SETUP CAROUSEL START ===');
+        
+        const stage = document.getElementById('carouselStage');
+        if (!stage) {
+          console.error('Carousel stage not found');
+          return;
+        }
+        
+        // Only create visible cards based on peek + back stack zones
+        const PEEKS_EACH_SIDE = 2;
+        const BACK_VISIBLE = 3;
+        const VISIBLE_RANGE = PEEKS_EACH_SIDE + BACK_VISIBLE; // 5 cards on each side
+        this.carouselCards = [];
+        
+        // Create only the cards we need to show
+        for (let i = 0; i < this.memories.length; i++) {
+          const el = document.createElement('div');
+          el.className = 'carousel-card';
+          el.dataset.index = i;
+          el.style.display = 'none'; // Hide by default
+          stage.appendChild(el);
+          this.carouselCards.push(el);
+        }
+        
+        console.log(`Created ${this.carouselCards.length} carousel card containers`);
+        
+        // Add random bend/curl variations to each card
+        this.carouselCards.forEach((card) => {
+          // Extremely subtle tilts to prevent cropping
+          const bx = gsap.utils.random(-0.5, 0.5);  // rotateX baseline
+          const by = gsap.utils.random(-0.5, 0.5);  // rotateY baseline
+
+          card.dataset.bx = bx.toFixed(2);
+          card.dataset.by = by.toFixed(2);
+        });
+        
+        // Load content for visible cards only
+        this.updateVisibleCards();
+        
+        // Keyboard navigation
+        this.carouselKeyboardHandler = (e) => {
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            e.preventDefault();
+            if (e.key === 'ArrowRight') this.carouselNext();
+            if (e.key === 'ArrowLeft') this.carouselPrev();
+          }
+        };
+        document.addEventListener('keydown', this.carouselKeyboardHandler);
+        
+        // Swipe gestures for touch devices
+        this.setupCarouselSwipe(stage);
+        
+        console.log('=== SETUP CAROUSEL COMPLETE ===');
+      }
+      
+      
+      updateVisibleCards() {
+        const index = this.carouselIndex;
+        const n = this.memories.length;
+        const PEEKS_EACH_SIDE = 2;
+        const BACK_VISIBLE = 3;
+        const range = PEEKS_EACH_SIDE + BACK_VISIBLE; // Total visible cards on each side
+        
+        // Determine which cards should be visible
+        const visibleIndices = new Set();
+        for (let offset = -range; offset <= range; offset++) {
+          const idx = (index + offset + n) % n;
+          visibleIndices.add(idx);
+        }
+        
+        // Update each card
+        this.carouselCards.forEach((card, i) => {
+          if (visibleIndices.has(i)) {
+            // Make visible and load content if needed
+            if (card.style.display === 'none') {
+              card.style.display = 'block';
+              
+              // Load content lazily
+              if (!card.dataset.loaded) {
+                const memory = this.memories[i];
+                let mediaContent = '';
+                
+                if (memory.type === 'photo' && memory.content) {
+                  mediaContent = `<img src="${memory.content}" alt="${memory.title}" decoding="async" />`;
+                } else if (memory.type === 'video' && memory.content) {
+                  // Note: autoplay is handled by layoutCarousel() when card is centered
+                  mediaContent = `<video src="${memory.content}" muted playsinline loop preload="metadata"></video>`;
+                } else {
+                  mediaContent = `<div style="width:100%;height:100%;background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);"></div>`;
+                }
+                
+                // Print container with effect layers
+                card.innerHTML = `
+                  <div class="print">
+                    ${mediaContent}
+                    <div class="paper"></div>
+                    <div class="sheen"></div>
+                  </div>
+                `;
+                card.dataset.loaded = 'true';
+                
+                // Add error handling for images
+                const img = card.querySelector('img');
+                if (img) {
+                  img.onerror = () => {
+                    console.error(`Failed to load image: ${memory.content}`);
+                  };
+                  img.onload = () => {
+                    console.log(`Loaded image: ${memory.content}`);
+                  };
+                }
+                
+                // Initialize GSAP props with starting values for animation
+                const isFirstLoad = !this.carouselInitialized;
+                gsap.set(card, {
+                  x: 0,
+                  y: 0,
+                  rotate: 0,
+                  scale: isFirstLoad ? 0.85 : 1,
+                  opacity: isFirstLoad ? 0 : 1,
+                  transformOrigin: "50% 60%",
+                  force3D: true
+                });
+              }
+            }
           } else {
-            imageDisplay = '<div class="memory-card-image"></div>';
+            // Hide cards that are too far away
+            if (card.style.display !== 'none') {
+              gsap.to(card, { 
+                opacity: 0, 
+                duration: 0.2,
+                onComplete: () => {
+                  card.style.display = 'none';
+                }
+              });
+            }
+          }
+        });
+        
+        // Layout with smooth animation on initial load
+        const isInitialLoad = !this.carouselInitialized;
+        requestAnimationFrame(() => this.layoutCarousel(false, isInitialLoad));
+        if (isInitialLoad) {
+          this.carouselInitialized = true;
+        }
+      }
+      
+      setupCarouselSwipe(stackEl) {
+        const canSwipe = window.matchMedia("(pointer: coarse)").matches;
+        
+        if (!canSwipe) {
+          console.log('Not a touch device, skipping swipe setup');
+          return;
+        }
+        
+        console.log('Setting up swipe gestures');
+        
+        let startX = 0, startY = 0, dragging = false, draggedCard = null;
+        const SWIPE_MIN_PX = 35;
+        const SWIPE_MAX_Y = 60;
+        
+        stackEl.addEventListener("pointerdown", (e) => {
+          if (this.carouselLocked) return;
+          dragging = true;
+          startX = e.clientX;
+          startY = e.clientY;
+          draggedCard = this.carouselCards[this.carouselIndex];
+          stackEl.setPointerCapture(e.pointerId);
+        }, { passive: true });
+        
+        stackEl.addEventListener("pointermove", (e) => {
+          if (!dragging || this.carouselLocked || !draggedCard) return;
+          
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+          
+          // Use requestAnimationFrame for smoother drag
+          if (!this.dragRaf) {
+            this.dragRaf = requestAnimationFrame(() => {
+              gsap.to(draggedCard, {
+                y: dy * 0.15,
+                z: Math.min(90, Math.abs(dx) * 0.6),
+                rotateZ: dx * 0.02,
+                rotateY: dx * 0.04,
+                duration: 0.08,
+                ease: "power2.out",
+                force3D: true,
+                overwrite: 'auto'
+              });
+              this.dragRaf = null;
+            });
+          }
+        });
+        
+        stackEl.addEventListener("pointerup", (e) => {
+          if (!dragging) return;
+          dragging = false;
+          
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+          
+          if (!draggedCard) return;
+          
+          if (Math.abs(dy) > SWIPE_MAX_Y || Math.abs(dx) < SWIPE_MIN_PX) {
+            gsap.to(draggedCard, {
+              y: 0,
+              z: 0,
+              rotateZ: 0,
+              rotateY: 0,
+              duration: 0.25,
+              ease: "power2.out",
+              force3D: true
+            });
+            draggedCard = null;
+            return;
           }
           
-          return `
-            <div class="memory-card" data-id="${memory.id}">
-              ${imageDisplay}
-              <div class="memory-card-content">
-                <div class="memory-card-type">${memory.type}</div>
-                <h3 class="memory-card-title">${memory.title}</h3>
-                ${memory.caption ? `<p class="memory-caption">${memory.caption}</p>` : ''}
-                <div class="memory-card-date">${formattedDate}</div>
-              </div>
-            </div>
-          `;
-        }).join('');
+          draggedCard = null;
+          if (dx > 0) this.carouselNext();
+          else this.carouselPrev();
+        });
         
-        return `<div class="grid-view">${cardsHTML}</div>`;
+        stackEl.addEventListener("pointercancel", () => {
+          dragging = false;
+          if (draggedCard) {
+            gsap.to(draggedCard, {
+              y: 0,
+              z: 0,
+              rotateZ: 0,
+              rotateY: 0,
+              duration: 0.25,
+              ease: "power2.out",
+              force3D: true
+            });
+            draggedCard = null;
+          }
+        });
       }
+      
+      layoutCarousel(immediate = false, isInitialLoad = false) {
+        if (this.isTransitioning) return; // Don't restack mid-flight
+        
+        const n = this.carouselCards.length;
+        const index = this.carouselIndex;
+        
+        // Layout zones: peek neighbors (small fan) + tight back stack
+        const PEEKS_EACH_SIDE = 2;     // cards that fan out left/right
+        const BACK_VISIBLE = 3;        // tight stack behind
+        
+        // Peek tuning (small fan, contained)
+        const PEEK_X = 42;
+        const PEEK_Y = 10;
+        const PEEK_ROT = 4.5;
+        const PEEK_SCALE_STEP = 0.03;
+        
+        // Back stack tuning (tight pile)
+        const BACK_DX = 6;
+        const BACK_DY = 6;
+        const BACK_Z = 26;
+        const BACK_ROT = -0.6;
+        
+        // Helper: shortest signed distance around the loop
+        const signedDist = (i, idx) => {
+          let d = i - idx;
+          if (d > n / 2) d -= n;
+          if (d < -n / 2) d += n;
+          return d;
+        };
+        
+        this.carouselCards.forEach((card, i) => {
+          if (card.style.display === 'none') return; // Skip hidden cards
+          
+          const d = signedDist(i, index);
+          
+          const bx = parseFloat(card.dataset.bx || "0");
+          const by = parseFloat(card.dataset.by || "0");
+          
+          const isTop = d === 0;
+          const isPeek = Math.abs(d) <= PEEKS_EACH_SIDE && !isTop;
+          
+          let x = 0, y = 0, z = 0, rz = 0, s = 1, o = 1, zIndex = 0;
+          
+          // Calculate depth for damping rotation (less bend deeper in stack)
+          const depth = Math.abs(d);
+          const damp = 1 - depth * 0.12; // less bend deeper in the stack
+          
+          // Keep last moved card fully opaque
+          const isLastMoved = card === this.lastMovedCard;
+          
+          if (isTop) {
+            // Top card: hero
+            x = 0; y = 0; z = 0;
+            rz = 0;
+            s = 1.03;
+            o = 1;
+            zIndex = 1000;
+          } else if (isPeek) {
+            // Peeking neighbors: small fan, contained
+            const step = Math.abs(d);
+            const dir = Math.sign(d); // -1 left, +1 right
+            
+            x = dir * (PEEK_X * step);
+            y = PEEK_Y * step;
+            z = -(step * 14); // slight depth so peeks still feel stacked
+            rz = dir * (PEEK_ROT * step);
+            
+            s = 1 - (step * PEEK_SCALE_STEP);
+            o = 0.92 - (step * 0.05);
+            zIndex = 900 - step;
+          } else {
+            // Everything else: tight stack behind (only show a few)
+            const depth = Math.abs(d);
+            
+            if (depth <= BACK_VISIBLE + PEEKS_EACH_SIDE) {
+              const backStep = depth - PEEKS_EACH_SIDE; // start after peek range
+              
+              x = backStep * BACK_DX;
+              y = backStep * BACK_DY;
+              z = -(backStep * BACK_Z);
+              rz = backStep * BACK_ROT;
+              
+              s = 1 - backStep * 0.028;
+              o = 0.70 - backStep * 0.08;
+              zIndex = 700 - backStep;
+            } else {
+              // hide far cards
+              o = 0;
+              zIndex = 0;
+              z = -999;
+            }
+          }
+          
+          // Override opacity for last moved card
+          if (isLastMoved) {
+            o = 1;
+          }
+          
+          const props = {
+            x, y, z,
+            rotateX: bx * 0.05 * damp,
+            rotateY: by * 0.05 * damp,
+            rotateZ: rz,
+            scale: s,
+            opacity: o,
+            zIndex,
+            filter: depth === 0 ? "brightness(1)" : "brightness(0.97)",
+            duration: immediate ? 0 : (isInitialLoad ? 1.2 : 0.5),
+            ease: "power4.out",
+            force3D: true
+          };
+          
+          // Add stagger delay for initial load
+          if (isInitialLoad) {
+            const depth = Math.abs(d);
+            props.delay = depth * 0.08;
+          }
+          
+          immediate ? gsap.set(card, props) : gsap.to(card, props);
+          
+          // Handle video autoplay for center card
+          const video = card.querySelector('video');
+          if (video) {
+            if (isTop) {
+              // Play video when it's the hero card
+              if (video.paused) {
+                video.currentTime = 0; // Start from beginning
+                video.play().catch(err => {
+                  console.log('Video autoplay prevented:', err);
+                });
+              }
+            } else {
+              // Pause and reset video when it's not centered
+              if (!video.paused) {
+                video.pause();
+                video.currentTime = 0;
+              }
+            }
+          }
+        });
+      }
+      
+      carouselPrev() {
+        if (this.carouselLocked || this.isTransitioning) return;
+        this.carouselLocked = true;
+        this.isTransitioning = true;
+        
+        const n = this.carouselCards.length;
+        
+        // Move index back first
+        this.carouselIndex = (this.carouselIndex - 1 + n) % n;
+        
+        // The card that should come to front
+        const incoming = this.carouselCards[this.carouselIndex];
+        
+        // Track this card as last moved
+        this.lastMovedCard = incoming;
+        
+        // Motion knobs - match forward animation
+        const Z_STEP = 30;
+        const LIFT_Y = 300;  // Same dramatic lift as forward
+        const SLOT_Z = 400;  // Start deep behind
+        
+        const PEEKS_EACH_SIDE = 2;
+        const BACK_VISIBLE = 3;
+        const VISIBLE = PEEKS_EACH_SIDE + BACK_VISIBLE;
+        const backDepth = Math.min(VISIBLE + 2, n - 1);
+        
+        const BACK_DX = 6, BACK_DY = 6, BACK_ROT = -0.6;
+        const backPose = {
+          x: backDepth * BACK_DX,
+          y: backDepth * BACK_DY,
+          z: -(backDepth * Z_STEP) - SLOT_Z,
+          rotateZ: backDepth * BACK_ROT,
+          scale: 1 - backDepth * 0.028
+        };
+        
+        const bx = parseFloat(incoming.dataset.bx || "0");
+        const by = parseFloat(incoming.dataset.by || "0");
+        
+        // Start deep behind the stack
+        gsap.set(incoming, {
+          ...backPose,
+          y: backPose.y,
+          rotateX: bx * 0.05,
+          rotateY: by * 0.05,
+          opacity: 1,
+          zIndex: 9999
+        });
+        
+        const tl = gsap.timeline({
+          onComplete: () => {
+            gsap.set(incoming, { zIndex: 0 });
+            
+            this.isTransitioning = false;
+            
+            // Restack everyone once
+            this.updateVisibleCards();
+            requestAnimationFrame(() => this.layoutCarousel(false));
+            
+            this.carouselLocked = false;
+          }
+        });
+        
+        // Stage 1: Lift HIGH from behind - rise above the stack (invisible)
+        tl.to(incoming, {
+          y: backPose.y - LIFT_Y,
+          rotateZ: backPose.rotateZ - 8,
+          rotateX: bx * 0.5,
+          rotateY: by * 0.5,
+          scale: 1.05,
+          opacity: 0,  // Start invisible from deep behind
+          duration: 0.30,
+          ease: "power2.out"
+        });
+        
+        // Stage 2: Come forward toward camera while still high (fade in to 75%)
+        tl.to(incoming, {
+          z: 50,  // Pop forward in front
+          rotateZ: "-=5",
+          opacity: 0.75,  // Fade in to 75% at highest point
+          duration: 0.25,
+          ease: "power2.out"
+        });
+        
+        // Stage 3: Descend to hero position (full opacity)
+        tl.to(incoming, {
+          x: 0,
+          y: 0,
+          z: 0,
+          rotateZ: 0,
+          rotateX: bx * 0.05,
+          rotateY: by * 0.05,
+          scale: 1.03,
+          opacity: 1,  // Full opacity at center
+          duration: 0.35,
+          ease: "sine.inOut"
+        });
+        
+        // Stage 4: Final settle
+        tl.to(incoming, {
+          scale: 1.03,
+          duration: 0.12,
+          ease: "power1.out"
+        });
+      }
+      
+      carouselNext() {
+        if (this.carouselLocked || this.isTransitioning) return;
+        this.carouselLocked = true;
+        this.isTransitioning = true;
+        
+        const card = this.carouselCards[this.carouselIndex];
+        const n = this.carouselCards.length;
+        
+        // Track this card as last moved
+        this.lastMovedCard = card;
+        
+        // Keep it above everything during the move
+        gsap.set(card, { zIndex: 9999, opacity: 1 });
+        
+        // Motion constants
+        const Z_STEP = 30;
+        const LIFT_Y = 300;  // Lift VERY HIGH to clear the entire stack
+        const SLOT_Z_EXTRA = 400;  // Go DEEP behind everything (peeks + back stack)
+        
+        const PEEKS_EACH_SIDE = 2;
+        const BACK_VISIBLE = 3;
+        const VISIBLE = PEEKS_EACH_SIDE + BACK_VISIBLE;
+        const backDepth = Math.min(VISIBLE + 2, n - 1);
+        
+        const BACK_DX = 6, BACK_DY = 6, BACK_ROT = -0.6;
+        const finalBack = {
+          x: backDepth * BACK_DX,
+          y: backDepth * BACK_DY,
+          z: -(backDepth * Z_STEP),
+          rotateZ: backDepth * BACK_ROT,
+          scale: 1 - backDepth * 0.028
+        };
+        
+        const bx = parseFloat(card.dataset.bx || "0");
+        const by = parseFloat(card.dataset.by || "0");
+        
+        const tl = gsap.timeline({
+          onComplete: () => {
+            // Reorder after animation
+            this.carouselIndex = (this.carouselIndex + 1) % n;
+            
+            // Snap to final back pose
+            gsap.set(card, { ...finalBack, zIndex: 0 });
+            
+            this.isTransitioning = false;
+            this.updateVisibleCards();
+            requestAnimationFrame(() => this.layoutCarousel(false));
+            
+            this.carouselLocked = false;
+          }
+        });
+        
+        // Stage 1: Lift VERY HIGH - clear above the entire stack AND fanned cards
+        tl.to(card, {
+          y: `-=${LIFT_Y}`,
+          z: 50,  // Pop forward so it's clearly above everything
+          rotateZ: "+=5",
+          rotateX: bx * 0.5,
+          rotateY: by * 0.5,
+          scale: 1.05,  // Keep it visible but not too big
+          opacity: 0.75,  // 75% opacity at highest point
+          duration: 0.30,
+          ease: "power2.out"
+        });
+        
+        // Stage 2: Immediately dive behind while still high up
+        tl.to(card, {
+          z: finalBack.z - SLOT_Z_EXTRA - 100,  // Go VERY deep negative immediately
+          rotateZ: "+=10",
+          scale: finalBack.scale,  // Keep normal scale
+          opacity: 0.1,  // Start fading out
+          duration: 0.25,
+          ease: "power2.in"
+        });
+        
+        // Stage 3: Now descend down behind the stack (fully invisible)
+        tl.to(card, {
+          x: finalBack.x,
+          y: finalBack.y - 20,
+          rotateZ: finalBack.rotateZ,
+          rotateX: bx * 0.05,
+          rotateY: by * 0.05,
+          scale: finalBack.scale,
+          opacity: 0,  // Fully invisible while descending
+          duration: 0.35,
+          ease: "sine.inOut"
+        });
+        
+        // Stage 4: Final settle (stay invisible at back)
+        tl.to(card, {
+          y: finalBack.y,
+          opacity: 0,  // Stay invisible at the back
+          duration: 0.12,
+          ease: "power1.out"
+        });
+      }
+      
+      
+      
     }
     
     // Initialize app when DOM is ready
     document.addEventListener('DOMContentLoaded', () => {
+      // Check if GSAP is loaded
+      if (typeof gsap !== 'undefined') {
+        console.log('✅ GSAP loaded successfully!');
+        
+        // Set global GSAP defaults for hardware acceleration
+        gsap.defaults({ force3D: true });
+      } else {
+        console.error('❌ GSAP not loaded!');
+      }
+      
       window.app = new MemoryScrapbookApp();
       console.log('Memory Scrapbook App initialized');
     });
