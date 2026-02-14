@@ -39,7 +39,7 @@
     }
     
     body {
-      font-family: 'IBM Plex Mono', monospace;
+      font-family: 'Space Mono', monospace;
       font-weight: 400;
       color: var(--text-primary);
       background: linear-gradient(135deg, #faf8f5 0%, #f5f0e8 100%);
@@ -80,7 +80,7 @@
        TYPOGRAPHY
        ============================================ */
     h1, h2, h3 {
-      font-family: 'IBM Plex Mono', monospace;
+      font-family: 'Space Mono', monospace;
       font-weight: 700;
     }
     
@@ -97,7 +97,7 @@
     }
     
     p, label, button {
-      font-family: 'IBM Plex Mono', monospace;
+      font-family: 'Space Mono', monospace;
     }
     
     /* Secondary font for captions and letters */
@@ -154,8 +154,44 @@
     }
     
     /* ============================================
-       HEADER - Removed
+       HEADER & NAVIGATION
        ============================================ */
+    .nav-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      z-index: 99;
+      background: linear-gradient(to bottom, rgba(250, 248, 245, 0.95), rgba(250, 248, 245, 0));
+    }
+    
+    .nav-link {
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      font-weight: 400;
+      text-decoration: none;
+      text-transform: lowercase;
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+      position: relative;
+      height: 24px;
+    }
+    
+    .nav-link:hover {
+      transform: translateY(-2px);
+    }
+    
+    .nav-link.secondary {
+      color: var(--text-secondary);
+    }
+    
+    .nav-link.secondary:hover {
+      color: var(--accent-light);
+    }
     
     /* ============================================
        BUTTONS
@@ -211,14 +247,33 @@
        ACTION BUTTONS
        ============================================ */
     .action-bar {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 2rem;
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      z-index: 100;
+      display: none; /* Hidden - not needed for this project */
     }
     
     .create-memory-btn {
-      font-size: 1.1rem;
-      padding: 1rem 2.5rem;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      padding: 0;
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px var(--shadow-medium);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+    
+    .create-memory-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 25px var(--shadow-medium);
     }
     
     /* ============================================
@@ -651,9 +706,502 @@
     }
     
     /* ============================================
+       POSTCARD / LETTER FLIP CARDS
+       ============================================ */
+    .postcard-view {
+      width: 100%;
+      height: 85vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: unset;
+      margin: 0 -2rem;
+      padding: 2rem;
+      perspective: 1200px;
+    }
+    
+    .postcard-stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      perspective: 1200px;
+      background: transparent;
+    }
+    
+    .postcard-card {
+      position: absolute;
+      width: clamp(280px, 50vw, 500px);
+      aspect-ratio: 3 / 4;
+      border-radius: 0;
+      overflow: visible;
+      will-change: transform, opacity;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform-origin: 50% 50%;
+      cursor: pointer;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .postcard-card.flipped .postcard-inner {
+      transform: rotateY(180deg);
+    }
+    
+    .postcard-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .postcard-front,
+    .postcard-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      background: var(--bg-card);
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(45, 37, 32, 0.1);
+    }
+    
+    .postcard-front {
+      padding: 2rem;
+    }
+    
+    .postcard-front {
+      transform: rotateY(0deg);
+      background: linear-gradient(135deg, #fdfcfb 0%, #f5f2ec 100%);
+    }
+    
+    .postcard-back {
+      transform: rotateY(180deg);
+      background: linear-gradient(135deg, #fdfcfb 0%, #f5f2ec 100%);
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .postcard-back-content {
+      height: 100%;
+      overflow-y: auto;
+      padding: 2rem;
+      padding-bottom: 3rem;
+    }
+    
+    .postcard-stamp {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 60px;
+      height: 60px;
+      border: 3px solid var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      background: rgba(255, 255, 255, 0.5);
+    }
+    
+    .postcard-address {
+      margin-top: auto;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--text-primary);
+    }
+    
+    .postcard-address .to-line {
+      font-style: italic;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .postcard-divider {
+      position: absolute;
+      left: 50%;
+      top: 2rem;
+      bottom: 2rem;
+      width: 1px;
+      background: repeating-linear-gradient(
+        to bottom,
+        var(--text-secondary) 0px,
+        var(--text-secondary) 8px,
+        transparent 8px,
+        transparent 16px
+      );
+      opacity: 0.3;
+    }
+    
+    .letter-date {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+    
+    .letter-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      line-height: 1.3;
+    }
+    
+    .letter-body {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-primary);
+      white-space: pre-wrap;
+      flex: 1;
+    }
+    
+    .letter-signature {
+      margin-top: 2rem;
+      font-family: 'Inter', sans-serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--text-primary);
+      text-align: right;
+    }
+    
+    .flip-hint {
+      position: absolute;
+      bottom: 1rem;
+      right: 1.5rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: 10;
+    }
+    
+    /* ============================================
+       SURPRISE VALENTINE'S POSTCARD
+       ============================================ */
+    .surprise-postcard-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(12px);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    .surprise-postcard-overlay.active {
+      display: flex;
+    }
+    
+    .surprise-postcard {
+      width: clamp(320px, 85vw, 600px);
+      aspect-ratio: 3 / 4;
+      position: relative;
+      animation: floatIn 1s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    
+    @keyframes floatIn {
+      from {
+        opacity: 0;
+        transform: translateY(-100px) scale(0.8) rotateX(-20deg);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotateX(0deg);
+      }
+    }
+    
+    .surprise-postcard.fly-away {
+      animation: flyAway 1.2s cubic-bezier(0.6, 0, 0.8, 1) forwards;
+    }
+    
+    @keyframes flyAway {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotateZ(0deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-150vh) translateX(50vw) scale(0.3) rotateZ(45deg);
+      }
+    }
+    
+    .surprise-postcard-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .surprise-postcard.flipped .surprise-postcard-inner {
+      transform: rotateY(180deg);
+    }
+    
+    .surprise-postcard-front,
+    .surprise-postcard-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      background: linear-gradient(135deg, #fdfcfb 0%, #f5f2ec 100%);
+      box-shadow: 0 30px 80px rgba(0,0,0,.5);
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(45, 37, 32, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .surprise-postcard-front {
+      transform: rotateY(0deg);
+      padding: 1.5rem;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    
+    .surprise-postcard-back {
+      transform: rotateY(180deg);
+      overflow: hidden;
+    }
+    
+    .surprise-special-message {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    
+    .surprise-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+    
+    .surprise-tap-hint {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      opacity: 0.6;
+    }
+    
+    .surprise-close-btn {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid var(--text-primary);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-family: 'Space Mono', monospace;
+      font-size: 1.2rem;
+      color: var(--text-primary);
+      z-index: 10;
+      transition: all 0.3s ease;
+      padding: 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    .surprise-close-btn:hover {
+      transform: scale(1.1);
+      background: var(--text-primary);
+      color: white;
+    }
+    
+    .surprise-postcard-back-content {
+      height: 100%;
+      overflow-y: auto;
+      padding: 1.5rem;
+      padding-bottom: 3rem;
+    }
+    
+    .surprise-letter-date {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+    
+    .surprise-letter-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      line-height: 1.3;
+    }
+    
+    .surprise-letter-body {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text-primary);
+      white-space: pre-wrap;
+      margin-bottom: 2rem;
+    }
+    
+    .surprise-letter-signature {
+      font-family: 'Inter', sans-serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--text-primary);
+      text-align: right;
+      margin-top: 2rem;
+    }
+    
+    .surprise-envelope-icon {
+      font-size: 4rem;
+      margin-bottom: 2rem;
+      animation: bounce 2s infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    /* ============================================
+       MOBILE LETTER FULLSCREEN VIEW
+       ============================================ */
+    .mobile-letter-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-card);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      animation: slideUp 0.3s ease;
+    }
+    
+    .mobile-letter-modal.active {
+      display: flex;
+    }
+    
+    @keyframes slideUp {
+      from {
+        transform: translateY(100%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+    
+    .mobile-letter-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(45, 37, 32, 0.1);
+      background: linear-gradient(135deg, #fdfcfb 0%, #f5f2ec 100%);
+    }
+    
+    .mobile-letter-back-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Space Mono', monospace;
+      box-shadow: none;
+    }
+    
+    .mobile-letter-back-btn:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .mobile-letter-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2rem 1.5rem;
+      background: linear-gradient(135deg, #fdfcfb 0%, #f5f2ec 100%);
+    }
+    
+    .mobile-letter-date {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+    
+    .mobile-letter-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      line-height: 1.3;
+    }
+    
+    .mobile-letter-body {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-primary);
+      white-space: pre-wrap;
+      margin-bottom: 2rem;
+    }
+    
+    .mobile-letter-signature {
+      font-family: 'Inter', sans-serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--text-primary);
+      text-align: right;
+      margin-top: 2rem;
+    }
+    
+    /* ============================================
        MOBILE RESPONSIVENESS
        ============================================ */
     @media (max-width: 768px) {
+      .nav-header {
+        padding: 1.5rem 1rem;
+        gap: 2rem;
+      }
+      
+      .nav-link {
+        font-size: 1rem;
+      }
+      
       .container {
         padding: 1rem;
       }
@@ -704,10 +1252,102 @@
         width: clamp(200px, 65vw, 360px);
       }
       
+      /* Postcard view mobile adjustments */
+      .postcard-view {
+        height: 75vh;
+        margin: 0 -1rem;
+        padding: 1rem;
+      }
+      
+      .postcard-card {
+        width: clamp(240px, 75vw, 400px);
+      }
+      
+      .postcard-front {
+        padding: 1.5rem;
+      }
+      
+      .postcard-back-content {
+        padding: 1.5rem;
+        padding-bottom: 3rem;
+      }
+      
+      .postcard-stamp {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+      }
+      
+      .letter-title {
+        font-size: 1.1rem;
+      }
+      
+      .letter-body {
+        font-size: 0.95rem;
+      }
+      
+      /* Update hint text for mobile - they tap to open fullscreen */
+      .postcard-front .flip-hint {
+        display: none;
+      }
+      
+      .postcard-card::after {
+        content: 'tap to read →';
+        position: absolute;
+        bottom: 1rem;
+        right: 1.5rem;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        opacity: 0.6;
+        pointer-events: none;
+        z-index: 10;
+      }
+      
+      /* Surprise postcard mobile adjustments */
+      .surprise-postcard {
+        width: clamp(280px, 90vw, 500px);
+      }
+      
+      .surprise-postcard-front {
+        padding: 1rem;
+      }
+      
+      .surprise-postcard-back {
+        padding: 0;
+      }
+      
+      .surprise-postcard-back-content {
+        padding: 1rem;
+        padding-bottom: 2.5rem;
+      }
+      
+      .surprise-special-message {
+        font-size: 1.2rem;
+      }
+      
+      .surprise-letter-title {
+        font-size: 1.2rem;
+      }
+      
+      .surprise-letter-body {
+        font-size: 0.95rem;
+      }
+      
+      .surprise-envelope-icon {
+        font-size: 3rem;
+      }
+      
     }
   </style>
 </head>
 <body>
+  <!-- Navigation Header -->
+  <nav class="nav-header">
+    <a href="#" class="nav-link active">memories</a>
+    <a href="#" class="nav-link secondary">letters</a>
+  </nav>
+  
   <!-- Landing Page -->
   <div class="landing-page" id="landingPage">
     <div class="photo-stream" id="photoStream">
@@ -723,13 +1363,45 @@
     
     <main>
       <div class="action-bar">
-        <button class="create-memory-btn" id="createMemoryBtn">+ Create Memory</button>
+        <button class="create-memory-btn" id="createMemoryBtn">+</button>
       </div>
       
       <div id="app-content">
         <!-- Content will be rendered here -->
       </div>
     </main>
+  </div>
+  
+  <!-- Surprise Valentine's Postcard Overlay -->
+  <div class="surprise-postcard-overlay" id="surprisePostcardOverlay">
+    <div class="surprise-postcard" id="surprisePostcard">
+      <button class="surprise-close-btn" id="surpriseCloseBtn">✕</button>
+      <div class="surprise-postcard-inner">
+        <div class="surprise-postcard-front">
+          <div class="surprise-envelope-icon">💌</div>
+          <div class="surprise-special-message">You have a special letter!</div>
+          <div class="surprise-subtitle">made by emily &lt;3</div>
+          <div class="surprise-tap-hint">click to open →</div>
+        </div>
+        <div class="surprise-postcard-back">
+          <div class="surprise-postcard-back-content" id="surpriseLetterContent">
+            <!-- Letter content will be populated here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobile Letter Fullscreen Modal -->
+  <div class="mobile-letter-modal" id="mobileLetterModal">
+    <div class="mobile-letter-header">
+      <button class="mobile-letter-back-btn" id="mobileLetterBackBtn">
+        ← Back
+      </button>
+    </div>
+    <div class="mobile-letter-content" id="mobileLetterContent">
+      <!-- Letter content will be injected here -->
+    </div>
   </div>
   
   <!-- Create Memory Modal -->
@@ -821,6 +1493,8 @@
     class MemoryScrapbookApp {
       constructor() {
         this.memories = [];
+        this.letters = [];
+        this.currentView = 'memories'; // 'memories' or 'letters'
         this.landingActive = true;
         this.carouselIndex = 0;
         this.carouselLocked = false;
@@ -828,6 +1502,10 @@
         this.carouselInitialized = false;
         this.lastMovedCard = null;
         this.isTransitioning = false;
+        this.postcardIndex = 0;
+        this.postcardCards = [];
+        this.postcardInitialized = false;
+        this.surpriseLetterViewed = false;
         
         this.init();
       }
@@ -839,6 +1517,11 @@
         console.log('Loading memories...');
         await this.loadMemories();
         console.log(`Loaded ${this.memories.length} memories`);
+        
+        // Load letters
+        console.log('Loading letters...');
+        await this.loadLetters();
+        console.log(`Loaded ${this.letters.length} letters`);
         
         // Setup photo stream on landing page
         console.log('Setting up photo stream...');
@@ -878,6 +1561,533 @@
         } catch (error) {
           console.warn('Storage not available, using only photo data:', error);
         }
+      }
+      
+      async loadLetters() {
+        console.log('🔄 Starting to load letters...');
+        
+        // Load demo letters first (newest to oldest)
+        this.letters = [
+          {
+            id: 'letter_6',
+            type: 'letter',
+            date: '2026-02-14',
+            title: 'Happy 2nd Valentine\'s Day!',
+            content: `happy valentine's day baby!!!!
+
+i know we said no gifts but you basically got me the best present of all time, seeing my mother take the stage in all her glory, so i had to at least make something small…
+
+i don't have a physical card on me so i guess this will have to do!! it's been one year since my last email but i thought maybe i should send this to you via different form. we play with form in this house!
+
+another valentine's day in the books - i am so grateful for you and this relationship and all the memories we've made this past year. i cannot wait to keep making more!
+
+you have been my foundation and i hope to be the same for you. being with you has transformed me into a person i'm super proud of - your confidence in me helps me have confidence in myself to do hard things — pursue new projects at work, challenge myself physically (marathon…amongst other physical activities,) and be the best version of myself!!
+
+i really feel like i have learned to love myself the most i ever have because of you!!!! and for that i will always be so grateful and appreciative of you.
+
+i'm so very much looking forward to seeing how the rest of this year unfolds for us. and i don't tell you enough, i'm so proud of you today and everyday! you've been putting in #work and created a beautiful life - a hard year of recovery post-surgery while being a stellar employee and a dedicated, loving father and partner to me and goose.
+
+i don't believe in these silly holidays but if i can celebrate you and our relationship, why not!!! kissies for u my deary!!! i cannot wait to get RAILED!
+
+love,
+emily`,
+            to: 'Nate',
+            from: 'Emily',
+            isSpecial: true // Mark this as the special surprise letter
+          },
+          {
+            id: 'letter_5',
+            type: 'letter',
+            date: '2025-02-14',
+            title: 'happy valentine\'s day luvr',
+            content: `To my lover <3,
+
+Happy Valentine's Day!
+
+This is me breaking our streak of sending emails when I leave the continent. Me perthonally don't love capitalistic holidays, but luckily I have a huge crush on you that I'll make an exception. 🤭
+
+The other day, in our drunken stupor, I was asked to share my favorite things about you to my friends; Hermes was feeling soft and said, "How lucky are two people to 1. find one another 2. feel the same way about the other person? Out of all the people in the world, two people agree that they want to be with each other." It's been sticking with me this week and it helps ground me in this truth: I am so fortunate that I get to be in this relationship with you.
+
+I love spending time with you—whether we're at home, out with our friends, dancing our asses off at a concert where we maybe know two songs, or traveling in different countries. It doesn't really matter what we're doing; I'm just happy to be with you.
+________
+
+My heart swells when I think about how you truly show up for me in every aspect—through both the good and the bad. Your ability to be so understanding, patient, and communicative leaves me in awe. I see you growing every day, and I'm so proud of the person you are; I feel incredibly lucky that you've included me in your life.
+
+I was always nervous about the first time I would cry in front of you, in fear that I would be a lot to deal with (and I'm sure I defo was.) My meltdown was a testament to your character; you are truly such an amazing partner and I'm so appreciative of you. You make me feel seen, heard, and cared for, no matter what situation we're in — one of many of my favorite things about you. 
+
+The tail end of last week was absolutely garbage - the bad days on Thursday and Friday mixed with a hefty tow were the straws that broke the camel's back and I really didn't have it within me to wall up my emotions. Whoops, compartmentalization failed me here! I hate crying (even though I think I'm the biggest crybaby on earth,) and you were beyond caring and patient - wiping my tears, holding me, and patiently hearing me out in all my nonsense!
+
+I'm working on being more expressive with these big feelings but you make it so much easier to take the first scary steps.
+________
+
+As we have always said, our friends and family are so important to us. I love that we are always aligned, but it's absolute tops that we greatly value the people in our lives.
+
+You didn't know past me, but my inner circle definitely does! My friends tell me how good you are for me and I have to agree wholeheartedly.
+
+I've been hardened and jaded about the idea of relationships; Victoria said it to you and I'll reiterate it again - I convinced myself that I could go the rest of my life without ever being in a relationship again; I avoid big, confusing feelings by nature, but since being with you, it's been light work to dismantle.
+
+From time to time, I think about you asking me on the car ride to LA about things I'm learning from you. While this isn't something you've directly taught me, I feel myself changing — actively opening up more, being more overt (verbally and nonverbally) showing my care towards people, the list goes on.
+
+I'm always stumped when people ask me what I like about you, and it's so hard to pick just one thing; I know your curiosity was peaked so I'll indulge you:
+
+Some of my favorite things about you
+
+Your care for me is palpable. All the things you do for me, small and big, do not go unnoticed. There's not a question in my mind how you feel about me - I know because you show it every day.
+You always seek to understand. With me, with other people, with things you don't know the full answer to - you ask such good questions not to look smart, but truly to understand the other. 
+Being in step with each other. I think this speaks for itself! We are aligned and that is just so hard to come by ❤️
+Adaptable. You adjust and change (within reason!) I see this when I give you feedback, but this also extends to you saying fuck it to your routine and letting me take up space, as well as making time to get to know my friends on a random Wednesday night. I know how much routine means to you, but you throwing it out the window for me on occasion means more than you know.
+Open to feedback. I always laugh when I think about how you would tell me you don't do well with receiving feedback - I have not once seen you take feedback poorly, both personally and professionally. Please revisit point 2. I see you wanting to be better every day and it makes me so proud of you
+Balance. I'm stealing your answer when Victoria asked you - I love how aligned we are in wanting to spend time together and having space to grow as individuals. I obviously miss you on days we aren't together, but some habits need to be formed apart for longevity reasons…and I'm in it for the long haul, baby!!
+Shower time. I love the way you look at me when you're brushing your teeth or we're letting the water warm up.
+The sound of you gagging when you're scraping your tongue - makes me laugh every time
+Reaching out to me in the middle of the night to hold my hand. Or to cuddle - best feeling ever (Pretty sure I make an audible sound when you do it)
+Touching me in bed. Mr. Funny Bizness knows what he's doing when your soft lady hands start rubbing me up and down.
+Efficient and timely. I love how prompt you are to move the cars at 6:45am, no more tickets PLEASE PLEASE PLEASE. Always optimizing for efficiency (when it matters.) You are so good at balancing this.
+Repeating things to-do over and over again. It's so cute seeing you run through your list of things to do, and stuff you want to get done.
+Blowing kisses goodbye. I HATE when we part ways temporarily but you're so open with your affection that I can't help but feel slightly better about us separating 🥹
+The way you smell. Especially after a shower because you stink sometimes! Kidding. You always smell so good, sans your gassy moments, which now that I'm writing it, are happening more often than not…
+Our whispered talks in bed. I love gibgabbing with you - I feel like we could talk for hours on end and not run out of topics. I love what you have to say and all of your stories recounted in excruciating detail.
+Assertiveness. It's so sexy when you tell me what you want when I ask you. I've been told I'm fickle sometimes, so I could defo learn a thing or two from you here. 
+Your outlook on life. You're softening me and I love seeing the world through your eyes and perspective. You are so easygoing and it quells my anxiety, so thank you for being so stable and a good foundation for me to rely on.
+
+
+I want you to know how committed I am to you - I know labels are important to you and they have grown on me, too. This partnership feels easy in all the right ways but challenges me to be better every day. There's so much to look forward to (New York, Palm Springs, CHELLAAAA, more days at home!) and I'm so happy that we get to do it together. Sharing our lives has been so fulfilling and heartwarming, I'm so excited to continue merging as the days go on!
+
+
+
+CANNOT WAIT TO SEE YOU LATER. You're the best, baby. PREPARE TO BE SICK OF ME!!!
+
+
+
+❤️,
+
+Your Stage 5 Clinger
+
+
+
+P.S. I forgot to add - when you write on the windshield and the wet shower door 🥰`,
+            to: 'Nate',
+            from: 'Emily'
+          },
+          {
+            id: 'letter_4',
+            type: 'letter',
+            date: '2025-01-11',
+            title: 're: sorry i didn\'t have an xmas card so this email will have to do',
+            content: `Merry early Christmas Emily Hope Louie, girl I'm exclusively with, who I have saved in my contacts, and who I like more and more each day, 
+
+As much as I love getting these emails, can they not only be when you are leaving the CONTINENT?! Luckily, this time I am chasing after you. 
+
+Your gifts were so generous and, frankly, the best gifts I received all Christmas, both from a tangible and sentimental perspective. I know they were not cheap, and they were very thoughtful. I want you to know I am very grateful for you. Especially compared to the fact that I got you pillows and ~vibes~ only!! 
+
+I'm glad we made it through November, and even though it was brutal, I agree with you - I wouldn't change it. It helped bring out a side of me that I've wanted to release for a while, but was never able to - my honest side. I've had a funky relationship with honesty for the past 10 years of my life, and I am glad I found someone I was comfortable sharing that with. You were extremely patient and understanding with me (definitely more than I deserved) and it ultimately made not only me a better person, but I believe it made our relationship a lot stronger. I will not take this opportunity for granted and am committed to growing by myself and together. Your willingness to stick by my side means more than you know. 
+
+*I typed the above on the way here and will be finishing the rest on my way home and when I am back home*
+
+-Apologies in advance for funky formatting as I was not a Communications major- 
+
+Absolutely loved the 'team' theme. I have a few replies to share:
+
+1. Trust: To be honest, I don't feel like I am doing anything special or walking on egg shells to rebuild trust, so please do tell me if you need more from me in this department. Maybe it is something that just comes naturally over time? I am very happy that you feel that we are moving in the right direction. I know I still have a lot of work to do, but I am so here for it. I've never had an ounce of distrust in you, so I don't think you need to change anything as it relates to trust. 
+
+2. Communication: This is actually one of the qualities that I love most about you, both how you communicate and how easy it is to communicate with you. Your directness, 'meaning-what-say', and 'not-talking-just-to-talk' communication style is so refreshing. I don't have to stress and try to guess what you're feeling or thinking because I am confident that you will openly express it to me. It's so easy to share my thoughts with you, whether it's a random story about my childhood, things about my family, or talking through how I have Bitch Eating Cracker Syndrome. I feel comfortable enough to talk about deeper topics with you, too; I think they just haven't come up or popped up in my head as often. I appreciate when you share your thoughts and parts of your life, especially because I know it's probably not easy. I want you to know that is totally okay, and I am happy to operate at whatever pace is comfortable for you. 
+
+-Sidenote while writing this: I understand more now why you journal and write a bunch in your notes app. Putting things down really gets you thinking. Right now I'm smiling in seat 65G thinking of how fortunate I am to have you in my life. I know you'll think I'm corny but it's all true. You've brought a lot of happiness into my life the last few months and I'm looking forward to a lot more. 
+
+3. Patience: Most people don't tell me that I'm patient, so thank you for noticing it and appreciating it. That also tells me that maybe YOU bring out the patience in me, so be sure to give yourself some credit for that. It's easy if it's the right person. You haven't been a handful (yet). Even your little New Years episode wasn't enough to scare me off. 
+
+4. Positive Attitude: What I got out of this was your open-mindedness. You mentioned once that you hate toxic positivity and I remember thinking, "Yikes." Combine that comment with the fact that you're rarely wrong and stick by your values, it makes me happy to see that you're willing to alter your thoughts to see the other side. This is a big deal for me because you know I value your thoughts/opinions/advice heavily but of course I know we will have differing views on things, and I had concerns that if we came to any sort of disagreement or difference in opinion, you wouldn't be willing to see the other side because you're just so accustomed to being right. Not sure if I communicated this well, so happy to discuss further in person.
+
+5. Reliable: Let's not forget the fact that YOU took such good care of ME, even when you were also super sick. I know you're not used to letting others take care of you, but being a team is a two-way street, so please know that you're not a burden to me and I ENJOY taking care of you. So from time to time, please let me take care of you. Speaking of airport pickups… expect another one on January 11. 
+
+We have a couple more weeks of January left, we can sync at the end of it to recap your holiday season. I hope you know you can still do what you want, when you want when you're not alone. I'm by your side because I like who you are, so don't change that. I always think about you telling me that you like me for who I am now as I am, not my potential. That has really stuck with me and truly makes me really happy. It's early days and I don't know where life is going to take us, but I am looking forward to finding out with you; and if I was a betting man (which I am), I really like our odds. 
+
+________
+
+Just some random thoughts:
+
+1. Clinginess: I know we joke about being a Stage 5 Clinger all the time. I've never felt this way towards someone before where I'm actually not sick of you. I actually am always thinking of the next time I get to see you. I've only ever been on the other side of this coin, and I know it can be overbearing and stressful, so please please tell me if it's ever too much because the last thing I ever want is for you to be feel uncomfortable in this relationship. Frankly, this is unfamiliar territory for me so I'd like to work with you to figure out the best way to navigate it. 
+
+2. Changing: I know you well enough at this point to know you heavily stand by the principle of 'you should not change for other people'. Let me play devil's advocate. I do feel myself changing, but I'm not uncomfortable. I know it's a good kind of change, the type where I become a better person. Never have I wanted to work on a better person, because I didn't think I had any flaws. You are able to help me see my flaws and improve them. Thank you. Maybe I can help you change in ways that you want.
+
+3. Corniness: One of your early reservations about me was that I talked a lot of talk, and you weren't sure if I could walk the walk. You clown me a lot for being corny, but I hope you know I do mean what I say. 
+
+4. Challenging: You challenge me and I like it. Short and sweet. I should start paying you.
+
+5. Friends: I threw you into the fire with my family, my roommates, my co-workers, and now some of my other friends; and unsurprisingly, everyone loves you. It means a lot to me that you introduced me to your friends because I know how important they are to you. They were welcoming and amazing, and I am excited to spend more time with them. You could say things are getting serious! 
+
+6. Traveling: You made my trip. Even though I went with my friends, I was looking forward to seeing you the whole time. From our kinky little rendezvous at Daan Park, looking for your passport intoxicated during New Years in CLV, amazing sleepovers at Le Meridien, to our wandering my mom's hometown of Shi Pai and Beitou District; I love that you are forever branded onto my Asia Trip 2024. 
+
+7. Comfort: Balatro together ill in bed. Singing all the words in Music and Lyrics. Picking my back hairs. Sharing parts of our lives like family and friends. Talking about prenups and Zillowing houses together. All the little things to the big deep things. You make it easy. 
+
+8. Care: I have a deep-rooted care for you. One that built so fast and strong over a short period of time. This isn't how I move, so be patient with me. 
+
+Have a safe flight and know I'll be counting down the hours until I see you. Maybe we can try kissing when you're back home?
+
+SF Missed You,
++1 (408) 806-7137`,
+            to: 'Emily',
+            from: 'Nate'
+          },
+          {
+            id: 'letter_3',
+            type: 'letter',
+            date: '2024-12-21',
+            title: 'sorry i didn\'t have an xmas card so this email will have to do',
+            content: `Dear +1 (408) 806-7137, guy I'm exclusive with, my best teammate,
+
+I'm closely tying our email correspondence and airplane rides together now. I wrote my first one with my stomach flipping on my flight to Korea, you sent your response on my flight back home, so it felt right to send this to you the moment I touched down in Hong Kong. I didn't have a card on hand when I gave you your gift, which really affirms the fact that we should definitely both get boxes of cards. Anyway, consider this email my Christmas card to you.
+
+Merry Christmas! The gifts were just a small token of my gratitude and appreciation for you and all the things that you've done for me :) I'm so excited to see you in Taiwan - fate is on our side, but most importantly, Nate is by mine!!
+
+I've been drafting this email for a while but given the events of the past month, I held off. It's been tough with all the stuff that unfolded in November, but I learned a lot these last couple of weeks and wouldn't change it (even if I desperately wanted to in the thick of it.)
+
+Every day I feel like I get to know new parts about you and bottom line is, you're right, we are a great team. Some qualities that I find are integral to being a good teammate include: 
+
+Trust: Building trust together takes time and I'm happily taking this day by day. I don't like giving my trust willy nilly but spending time with you since I've been back has been surprisingly easy. I enjoy your company - both the quality and quantity have been different and refreshing. As the days go on, I feel like we are heading in a good direction (I hope you think so, too.)
+Communication: I am so grateful and honored that you feel comfortable sharing all your thoughts with me. I love hearing what you have to say and what goes on in that head of yours. We can laugh and say you're not thinking anything, but I disagree. I think you have so much insightful things to offer and I want to hear them all.
+Patience: You are so beyond patient with me - I've grown up being told that I'm a handful and hard to understand, but you are always steadfast and give me space to think (minus the big incident hehe) Efficiency is one of your pillars (one of my favorite things about you) but you accommodating and prioritizing me and my needs don't go unnoticed. I can't even articulate it into words how thankful I am for you when you do that.
+Positive attitude: I see this on the daily. You have an infectious positive energy even when you are suffering and feeling bad. Case in point, being sick and still seeing the bright side of the situation. Even when you were feeling sad about Christmas, you not only found something positive you want to embody, but also remained grateful through it all. I have always detested positiveness when things are hard and sad, but you model positivity in a good way and I admire that so much about you.
+Reliable: This goes without saying. You were feeling so much worse than me this past week, and still took care of me before yourself - it touched me and I get a little weepy if I think about it too long, so I WON'T! Oh, and let's not forget all the airport drop-offs & pick-ups <3 I appreciate you and I can always count on you to show up for me.
+Holidays always make me feel ~weird~ and sad — I mark the beginning of November until the end of January as my usual dips, but this season has been different. I chalk it up to being content that I am where I'm supposed to be in life right now and that I have a lot of things that make me happy.
+
+I've been on my own for a while and I usually like that I can do what I want, when I want. After spending quite a bit of time together the last couple of weeks, I realized that life is so much more fun and fulfilling when I can share it with you, especially when we stay home and watch Hugh Grant's best movie ever!!!
+
+It's early days, as we like to say, but I love where we are right now. I don't know where life is going to take us, but it doesn't seem so daunting knowing that we're teaming up and taking it on together.
+
+I'm so beyond excited to see you in your motherland! I've got a huge list of things I want to acquire in Asia, but truthfully, all I want for Christmas is you!! Hope you're feeling better, safe travels and see you soon, baby!
+
+xoxoxoxoxoxoxox,
+
+nate's bby ;)`,
+            to: 'Nate',
+            from: 'Emily'
+          },
+          {
+            id: 'letter_2',
+            type: 'letter',
+            date: '2024-10-28',
+            title: 're: Real freaks send emails',
+            content: `Dear Emily Hope Louie, 
+
+When I first saw this email notification pop up on my phone, I lowkey panicked. We had just finished our 3rd date and you were on your way to Korea, so I thought it was your sick way of telling me "Well thx for the mmrs, me go Korea bye!" Then as I started and continued reading, I couldn't stop smiling. It was so sweet, thoughtful, well-written, witty, and inside jokey. I was absolutely stunned. I went back and re-read this a few times and it made me smile and miss you more each time, so I hope you know how much it means to me.
+
+You are an insanely good writer, and despite my name, I am not a strong writer like Nathaniel Hawthorne. I will also not be following a specific format, but rather a mix of my thoughts and replying to different subject parts of your email like how we do over text (which I have never done with other people before, so either you converted me to your style or you also never did it and we just picked it up trying to match each other's freak). You just texted me mentioning that you were able to email me on your flight here, so I want you to know that I was already in the middle of typing this response out and I didn't just do it because you coincidentally mentioned it just now!!
+
+First off I'd like to clearly layout that I do remember all of our dates:
+(Sep 26) Anina, Hazie, failed Public Izakaya attempt, Grubstake diner, and then a walk in the park until 3:30am 
+(Sep 30) Dinner at Norcina before you left for LA. came back to my place, and we had our first kiss, showered together, stayed overnight, and got our first parking ticket together. Don't worry we don't have to tell our kids all the details. 
+(Oct 2?) Dropped you off at the airport on your way to your Fullerton marathon 
+(October 9) Casual sushi dinner on the balcony ;) 
+
+I know it's only been 2.5 3 full dates, but I already feel so comfortable with you. It takes two to tango, and we are tangoing. 
+
+I love your current mantra of "Do what I want, when I want." Sending something like this is extremely bold and risky, which shows me the type of person you are. From the very first date, I knew you were different and I felt a certain way towards you. That's why I really appreciate how transparent you have communicated how you felt about me in your car and over email, because it validated early that you also felt there was (plz don't cringe but just because for a lack of a better phrase) something special between us. You're clearly very emotionally mature, so why beat around the bush and play the game of pretending not to care? You're different, and I think I like that. 
+
+Your email overall showed a quality that I really love about you: appreciation. I obviously don't do any of these gestures expecting anything in return, but it does feel good to know that you notice and appreciate something as little as me filling up your cup of water to a white tablecloth dinner. I want to know I appreciate your appreciation. Other qualities I like about you (but are not limited to) are your:
+Directness: Thanks for telling me that you're not the best at verbalizing your affection, but yet you still directly communicated it to me via a different way. And I have no doubt that as we continue talking you will have no problem being direct with me about anything on your mind.
+I-don't-care-what-other-people-think-ness: I think it'll take me some time to understand exactly how far this stretches, but so far you move the way you want to move, you do what you want to do because you are so confident in yourself that you don't care what others think. This is actually a quality I want to work on and I'm certain I can learn a thing or two from you. 
+Mutual reciprocation of effort: You didn't have to make any time for me before you went on your travels, but you did, and that meant so much to me. 
+Independence: You have work, friends, life, etc. You're clearly a boss-ass bitch. I like that balance that we have between doing our own thing + stage 5 clinger simp status. 
+
+Another green flag I'll give you is how you get along with my friends so far. Something very important to me are my friends, and it does matter a lot to me what they think. Don't let it get to your head, but they are Team Emily. A few times, we've had people over, and they ask me what's new in my life, and If I've been seeing anyone, where I reply, "Yeah, I've been seeing this girl named Emily." Before I can say much else, all you hear is "She is soooo bomb." "She's hella dope." "We are big fans of her." from my roommates. So trust me when I say that they were happy to enlist in helping out with a silly little dinner gesture. 
+
+You have taught me a lot ranging from advanced SAT vocabulary to cultural references like .5x seflies, movies, and lingo. Thank you for bearing with my boomer ass. I mentioned it to once in person, but I truly think I'll learn a lot from you, and I know it sounds cliche, and that you'll make me a better person. 
+
+Nathaniel, if there was a world we had to start over because I'm gone for so long, I wouldn't do anything different.
+
+This was some poetic justice and it hit different. Not going to lie, I was worried when you initially told me that you were going to Korea for a month because I was afraid that we would lose momentum by not seeing each other in person for so long. I was wrong. I learned more about you by talking to you every single day and I've been excitedly counting down the days until I can see you again. If I have to be kidnapped and eat mid-ass diner food until 3:30am again, then twist my arm! 
+
+Wow, I can't believe we survived a month! Safe travels, eat some extra airplane food for me, and I'll see my lil mandu later today (maybe). I know you don't get butterflies, but I hope this at least made you smile. 
+
+I couldn't forget you even if I tried, 
+shawty, Nate, 408-806-7137 🙄
+
+P.S. You have no idea how excited I am to see your cute face, walk through your docket, and get back to our regularly scheduled freakathons.`,
+            to: 'Emily',
+            from: 'Nate'
+          },
+          {
+            id: 'letter_1',
+            type: 'letter',
+            date: '2024-10-10',
+            title: 'Real freaks send emails',
+            content: `Dear +1 (408)-806-7137,
+
+I know reading isn't your strong suit so I'll try to keep it short!
+
+We agreed to candor and open + honest communication so I'm committing to that. I don't typically move like this but I want to, and my principle in life right now is to do what I want, when I want.
+
+In the short time that I've known you, I can identify some notable traits: your above-and-beyond thoughtfulness, dedication, and commitment to others, sans your kickball volo league. The shortlist that I've seen so far includes the penthouse guys, your friends (from grade 4 to work friends you made 4+ years ago), your family, Goose, etc.
+
+I've sat on it and my observation is this: your commitment to the bit is so admirable that I feel that you're not a person who does things in halves. You're relatively all-or-nothing, and I respect you for it.
+
+You embody all of the aforementioned qualities and I see them manifest themselves when you intentionally make the time to get to know me for hours on end or when you get up early to text me during my race despite partying late and yakking. You did your big one yesterday and it was pretty romantic; I feel very seen when you go out of your way to do that for me, especially since I am the one who asked you to make time for me! Foul on my part, but I will make it up to you, that's a promise.
+
+I'm not someone who gives much thought to flowers or candlelit rooftop take-out sushi dinners, but you doing all of that makes me feel some type of way. Your memory is shite but remembering how much I like James Blake and other songs and proceeding to queue all of them (yeah, I heard "I KNOW?") was an affectionate gesture. Enlisting the guys to help you out is over-the-top but makes me happy knowing how far you would go for one another.
+
+I was so caught off guard that I had no choice but to throw the 'natey boy docket' out the window — we'll revisit it another time.
+
+If I had to draw a comparison, it's the same feeling when you were trying to articulate the entire "you're different!" topic. I understand and I share your sentiment. But being in your company has been more than enough for me – the gestures are just icing on the cake.
+
+Affectionate communication is always hard for me to articulate verbally so I do what I know best, writing. *FYI, this is vastly different from being a keyboard warrior. I'm working on it though and I would totally tell you this in person, but oh no! I'm overseas!
+
+I want you to feel the same way you make me feel when you meet me more than halfway. Because quite truthfully, showing a stupid meme on Twitter is funny as fuck but doesn't quite measure up to the effort that you've been putting in - that's seven three dates, an airport drop-off, and a bedroom performance that I have to catch up to.
+
+All that to say, I miss you. Yeah, yeah, I'll say it first this time – I'm counting down the days until I see you again. I'll reiterate that I am steely and cagey so we can both work on being honest! You openly and honestly expressed that you miss me and I was still in front of you; name a more chaotic scene - hastily having a tender moment while parked illegally in front of your apartment, emergency lights on, all the cars lined up maneuvering past us; it moved me and it's a moment I'll think about for some time.
+
+I know we joke a lot about not blowing the other person's head up (this does not apply to…you know…😈) but if I learned anything in the last year, I want people to know how I feel about them. We never know what life will bring so I'm challenging my resistance to cringe.
+
+This is early days but I want you to know that I felt something different when we first met. I feel it now. And it might be presumptuous of me, but I like to believe you feel it, too. Correct me if I'm wrong though so we can chat about it and I will reassess my ability to read the room!
+
+I'm glad our paths have crossed because getting to know you has been so fun. I feel comfortable around you and I hope you feel the same way with me. I like your friends and am thankful you invited me to see a glimpse of your life. I want to show you mine, too. Spending time together is awesome - we laugh easily and can seamlessly talk about pretty much anything. I appreciate your effort on all fronts - initiating, planning, communicating. Fuck the marathon, our freakathons blow it out of the water.
+
+Nathaniel, if there was a world we had to start over because I'm gone for so long, I wouldn't do anything different.
+
+--
+
+See you soon (if you manage to remember me,)
+3:30am, 6:30am, Marathon girl
+
+P.S. Yes, it's 11/11`,
+            to: 'Nate',
+            from: 'Emily'
+          },
+          {
+            id: 'letter_2',
+            type: 'letter',
+            date: '2024-10-28',
+            title: 're: Real freaks send emails',
+            content: `Dear Emily Hope Louie, 
+
+When I first saw this email notification pop up on my phone, I lowkey panicked. We had just finished our 3rd date and you were on your way to Korea, so I thought it was your sick way of telling me "Well thx for the mmrs, me go Korea bye!" Then as I started and continued reading, I couldn't stop smiling. It was so sweet, thoughtful, well-written, witty, and inside jokey. I was absolutely stunned. I went back and re-read this a few times and it made me smile and miss you more each time, so I hope you know how much it means to me.
+
+You are an insanely good writer, and despite my name, I am not a strong writer like Nathaniel Hawthorne. I will also not be following a specific format, but rather a mix of my thoughts and replying to different subject parts of your email like how we do over text (which I have never done with other people before, so either you converted me to your style or you also never did it and we just picked it up trying to match each other's freak). You just texted me mentioning that you were able to email me on your flight here, so I want you to know that I was already in the middle of typing this response out and I didn't just do it because you coincidentally mentioned it just now!!
+
+First off I'd like to clearly layout that I do remember all of our dates:
+(Sep 26) Anina, Hazie, failed Public Izakaya attempt, Grubstake diner, and then a walk in the park until 3:30am 
+(Sep 30) Dinner at Norcina before you left for LA. came back to my place, and we had our first kiss, showered together, stayed overnight, and got our first parking ticket together. Don't worry we don't have to tell our kids all the details. 
+(Oct 2?) Dropped you off at the airport on your way to your Fullerton marathon 
+(October 9) Casual sushi dinner on the balcony ;) 
+
+I know it's only been 2.5 3 full dates, but I already feel so comfortable with you. It takes two to tango, and we are tangoing. 
+
+I love your current mantra of "Do what I want, when I want." Sending something like this is extremely bold and risky, which shows me the type of person you are. From the very first date, I knew you were different and I felt a certain way towards you. That's why I really appreciate how transparent you have communicated how you felt about me in your car and over email, because it validated early that you also felt there was (plz don't cringe but just because for a lack of a better phrase) something special between us. You're clearly very emotionally mature, so why beat around the bush and play the game of pretending not to care? You're different, and I think I like that. 
+
+Your email overall showed a quality that I really love about you: appreciation. I obviously don't do any of these gestures expecting anything in return, but it does feel good to know that you notice and appreciate something as little as me filling up your cup of water to a white tablecloth dinner. I want to know I appreciate your appreciation. Other qualities I like about you (but are not limited to) are your:
+Directness: Thanks for telling me that you're not the best at verbalizing your affection, but yet you still directly communicated it to me via a different way. And I have no doubt that as we continue talking you will have no problem being direct with me about anything on your mind.
+I-don't-care-what-other-people-think-ness: I think it'll take me some time to understand exactly how far this stretches, but so far you move the way you want to move, you do what you want to do because you are so confident in yourself that you don't care what others think. This is actually a quality I want to work on and I'm certain I can learn a thing or two from you. 
+Mutual reciprocation of effort: You didn't have to make any time for me before you went on your travels, but you did, and that meant so much to me. 
+Independence: You have work, friends, life, etc. You're clearly a boss-ass bitch. I like that balance that we have between doing our own thing + stage 5 clinger simp status. 
+
+Another green flag I'll give you is how you get along with my friends so far. Something very important to me are my friends, and it does matter a lot to me what they think. Don't let it get to your head, but they are Team Emily. A few times, we've had people over, and they ask me what's new in my life, and If I've been seeing anyone, where I reply, "Yeah, I've been seeing this girl named Emily." Before I can say much else, all you hear is "She is soooo bomb." "She's hella dope." "We are big fans of her." from my roommates. So trust me when I say that they were happy to enlist in helping out with a silly little dinner gesture. 
+
+You have taught me a lot ranging from advanced SAT vocabulary to cultural references like .5x seflies, movies, and lingo. Thank you for bearing with my boomer ass. I mentioned it to once in person, but I truly think I'll learn a lot from you, and I know it sounds cliche, and that you'll make me a better person. 
+
+Nathaniel, if there was a world we had to start over because I'm gone for so long, I wouldn't do anything different.
+
+This was some poetic justice and it hit different. Not going to lie, I was worried when you initially told me that you were going to Korea for a month because I was afraid that we would lose momentum by not seeing each other in person for so long. I was wrong. I learned more about you by talking to you every single day and I've been excitedly counting down the days until I can see you again. If I have to be kidnapped and eat mid-ass diner food until 3:30am again, then twist my arm! 
+
+Wow, I can't believe we survived a month! Safe travels, eat some extra airplane food for me, and I'll see my lil mandu later today (maybe). I know you don't get butterflies, but I hope this at least made you smile. 
+
+I couldn't forget you even if I tried, 
+shawty, Nate, 408-806-7137 🙄
+
+P.S. You have no idea how excited I am to see your cute face, walk through your docket, and get back to our regularly scheduled freakathons.`,
+            to: 'Emily',
+            from: 'Nate'
+          },
+          {
+            id: 'letter_3',
+            type: 'letter',
+            date: '2024-12-21',
+            title: 'sorry i didn\'t have an xmas card so this email will have to do',
+            content: `Dear +1 (408) 806-7137, guy I'm exclusive with, my best teammate,
+
+I'm closely tying our email correspondence and airplane rides together now. I wrote my first one with my stomach flipping on my flight to Korea, you sent your response on my flight back home, so it felt right to send this to you the moment I touched down in Hong Kong. I didn't have a card on hand when I gave you your gift, which really affirms the fact that we should definitely both get boxes of cards. Anyway, consider this email my Christmas card to you.
+
+Merry Christmas! The gifts were just a small token of my gratitude and appreciation for you and all the things that you've done for me :) I'm so excited to see you in Taiwan - fate is on our side, but most importantly, Nate is by mine!!
+
+I've been drafting this email for a while but given the events of the past month, I held off. It's been tough with all the stuff that unfolded in November, but I learned a lot these last couple of weeks and wouldn't change it (even if I desperately wanted to in the thick of it.)
+
+Every day I feel like I get to know new parts about you and bottom line is, you're right, we are a great team. Some qualities that I find are integral to being a good teammate include: 
+
+Trust: Building trust together takes time and I'm happily taking this day by day. I don't like giving my trust willy nilly but spending time with you since I've been back has been surprisingly easy. I enjoy your company - both the quality and quantity have been different and refreshing. As the days go on, I feel like we are heading in a good direction (I hope you think so, too.)
+Communication: I am so grateful and honored that you feel comfortable sharing all your thoughts with me. I love hearing what you have to say and what goes on in that head of yours. We can laugh and say you're not thinking anything, but I disagree. I think you have so much insightful things to offer and I want to hear them all.
+Patience: You are so beyond patient with me - I've grown up being told that I'm a handful and hard to understand, but you are always steadfast and give me space to think (minus the big incident hehe) Efficiency is one of your pillars (one of my favorite things about you) but you accommodating and prioritizing me and my needs don't go unnoticed. I can't even articulate it into words how thankful I am for you when you do that.
+Positive attitude: I see this on the daily. You have an infectious positive energy even when you are suffering and feeling bad. Case in point, being sick and still seeing the bright side of the situation. Even when you were feeling sad about Christmas, you not only found something positive you want to embody, but also remained grateful through it all. I have always detested positiveness when things are hard and sad, but you model positivity in a good way and I admire that so much about you.
+Reliable: This goes without saying. You were feeling so much worse than me this past week, and still took care of me before yourself - it touched me and I get a little weepy if I think about it too long, so I WON'T! Oh, and let's not forget all the airport drop-offs & pick-ups <3 I appreciate you and I can always count on you to show up for me.
+Holidays always make me feel ~weird~ and sad — I mark the beginning of November until the end of January as my usual dips, but this season has been different. I chalk it up to being content that I am where I'm supposed to be in life right now and that I have a lot of things that make me happy.
+
+I've been on my own for a while and I usually like that I can do what I want, when I want. After spending quite a bit of time together the last couple of weeks, I realized that life is so much more fun and fulfilling when I can share it with you, especially when we stay home and watch Hugh Grant's best movie ever!!!
+
+It's early days, as we like to say, but I love where we are right now. I don't know where life is going to take us, but it doesn't seem so daunting knowing that we're teaming up and taking it on together.
+
+I'm so beyond excited to see you in your motherland! I've got a huge list of things I want to acquire in Asia, but truthfully, all I want for Christmas is you!! Hope you're feeling better, safe travels and see you soon, baby!
+
+xoxoxoxoxoxoxox,
+
+nate's bby ;)`,
+            to: 'Nate',
+            from: 'Emily'
+          },
+          {
+            id: 'letter_4',
+            type: 'letter',
+            date: '2025-01-11',
+            title: 're: sorry i didn\'t have an xmas card so this email will have to do',
+            content: `Merry early Christmas Emily Hope Louie, girl I'm exclusively with, who I have saved in my contacts, and who I like more and more each day, 
+
+As much as I love getting these emails, can they not only be when you are leaving the CONTINENT?! Luckily, this time I am chasing after you. 
+
+Your gifts were so generous and, frankly, the best gifts I received all Christmas, both from a tangible and sentimental perspective. I know they were not cheap, and they were very thoughtful. I want you to know I am very grateful for you. Especially compared to the fact that I got you pillows and ~vibes~ only!! 
+
+I'm glad we made it through November, and even though it was brutal, I agree with you - I wouldn't change it. It helped bring out a side of me that I've wanted to release for a while, but was never able to - my honest side. I've had a funky relationship with honesty for the past 10 years of my life, and I am glad I found someone I was comfortable sharing that with. You were extremely patient and understanding with me (definitely more than I deserved) and it ultimately made not only me a better person, but I believe it made our relationship a lot stronger. I will not take this opportunity for granted and am committed to growing by myself and together. Your willingness to stick by my side means more than you know. 
+
+*I typed the above on the way here and will be finishing the rest on my way home and when I am back home*
+
+-Apologies in advance for funky formatting as I was not a Communications major- 
+
+Absolutely loved the 'team' theme. I have a few replies to share:
+
+1. Trust: To be honest, I don't feel like I am doing anything special or walking on egg shells to rebuild trust, so please do tell me if you need more from me in this department. Maybe it is something that just comes naturally over time? I am very happy that you feel that we are moving in the right direction. I know I still have a lot of work to do, but I am so here for it. I've never had an ounce of distrust in you, so I don't think you need to change anything as it relates to trust. 
+
+2. Communication: This is actually one of the qualities that I love most about you, both how you communicate and how easy it is to communicate with you. Your directness, 'meaning-what-say', and 'not-talking-just-to-talk' communication style is so refreshing. I don't have to stress and try to guess what you're feeling or thinking because I am confident that you will openly express it to me. It's so easy to share my thoughts with you, whether it's a random story about my childhood, things about my family, or talking through how I have Bitch Eating Cracker Syndrome. I feel comfortable enough to talk about deeper topics with you, too; I think they just haven't come up or popped up in my head as often. I appreciate when you share your thoughts and parts of your life, especially because I know it's probably not easy. I want you to know that is totally okay, and I am happy to operate at whatever pace is comfortable for you. 
+
+-Sidenote while writing this: I understand more now why you journal and write a bunch in your notes app. Putting things down really gets you thinking. Right now I'm smiling in seat 65G thinking of how fortunate I am to have you in my life. I know you'll think I'm corny but it's all true. You've brought a lot of happiness into my life the last few months and I'm looking forward to a lot more. 
+
+3. Patience: Most people don't tell me that I'm patient, so thank you for noticing it and appreciating it. That also tells me that maybe YOU bring out the patience in me, so be sure to give yourself some credit for that. It's easy if it's the right person. You haven't been a handful (yet). Even your little New Years episode wasn't enough to scare me off. 
+
+4. Positive Attitude: What I got out of this was your open-mindedness. You mentioned once that you hate toxic positivity and I remember thinking, "Yikes." Combine that comment with the fact that you're rarely wrong and stick by your values, it makes me happy to see that you're willing to alter your thoughts to see the other side. This is a big deal for me because you know I value your thoughts/opinions/advice heavily but of course I know we will have differing views on things, and I had concerns that if we came to any sort of disagreement or difference in opinion, you wouldn't be willing to see the other side because you're just so accustomed to being right. Not sure if I communicated this well, so happy to discuss further in person.
+
+5. Reliable: Let's not forget the fact that YOU took such good care of ME, even when you were also super sick. I know you're not used to letting others take care of you, but being a team is a two-way street, so please know that you're not a burden to me and I ENJOY taking care of you. So from time to time, please let me take care of you. Speaking of airport pickups… expect another one on January 11. 
+
+We have a couple more weeks of January left, we can sync at the end of it to recap your holiday season. I hope you know you can still do what you want, when you want when you're not alone. I'm by your side because I like who you are, so don't change that. I always think about you telling me that you like me for who I am now as I am, not my potential. That has really stuck with me and truly makes me really happy. It's early days and I don't know where life is going to take us, but I am looking forward to finding out with you; and if I was a betting man (which I am), I really like our odds. 
+
+________
+
+Just some random thoughts:
+
+1. Clinginess: I know we joke about being a Stage 5 Clinger all the time. I've never felt this way towards someone before where I'm actually not sick of you. I actually am always thinking of the next time I get to see you. I've only ever been on the other side of this coin, and I know it can be overbearing and stressful, so please please tell me if it's ever too much because the last thing I ever want is for you to be feel uncomfortable in this relationship. Frankly, this is unfamiliar territory for me so I'd like to work with you to figure out the best way to navigate it. 
+
+2. Changing: I know you well enough at this point to know you heavily stand by the principle of 'you should not change for other people'. Let me play devil's advocate. I do feel myself changing, but I'm not uncomfortable. I know it's a good kind of change, the type where I become a better person. Never have I wanted to work on a better person, because I didn't think I had any flaws. You are able to help me see my flaws and improve them. Thank you. Maybe I can help you change in ways that you want.
+
+3. Corniness: One of your early reservations about me was that I talked a lot of talk, and you weren't sure if I could walk the walk. You clown me a lot for being corny, but I hope you know I do mean what I say. 
+
+4. Challenging: You challenge me and I like it. Short and sweet. I should start paying you.
+
+5. Friends: I threw you into the fire with my family, my roommates, my co-workers, and now some of my other friends; and unsurprisingly, everyone loves you. It means a lot to me that you introduced me to your friends because I know how important they are to you. They were welcoming and amazing, and I am excited to spend more time with them. You could say things are getting serious! 
+
+6. Traveling: You made my trip. Even though I went with my friends, I was looking forward to seeing you the whole time. From our kinky little rendezvous at Daan Park, looking for your passport intoxicated during New Years in CLV, amazing sleepovers at Le Meridien, to our wandering my mom's hometown of Shi Pai and Beitou District; I love that you are forever branded onto my Asia Trip 2024. 
+
+7. Comfort: Balatro together ill in bed. Singing all the words in Music and Lyrics. Picking my back hairs. Sharing parts of our lives like family and friends. Talking about prenups and Zillowing houses together. All the little things to the big deep things. You make it easy. 
+
+8. Care: I have a deep-rooted care for you. One that built so fast and strong over a short period of time. This isn't how I move, so be patient with me. 
+
+Have a safe flight and know I'll be counting down the hours until I see you. Maybe we can try kissing when you're back home?
+
+SF Missed You,
++1 (408) 806-7137`,
+            to: 'Emily',
+            from: 'Nate'
+          },
+          {
+            id: 'letter_5',
+            type: 'letter',
+            date: '2025-02-14',
+            title: 'happy valentine\'s day luvr',
+            content: `To my lover <3,
+
+Happy Valentine's Day!
+
+This is me breaking our streak of sending emails when I leave the continent. Me perthonally don't love capitalistic holidays, but luckily I have a huge crush on you that I'll make an exception. 🤭
+
+The other day, in our drunken stupor, I was asked to share my favorite things about you to my friends; Hermes was feeling soft and said, "How lucky are two people to 1. find one another 2. feel the same way about the other person? Out of all the people in the world, two people agree that they want to be with each other." It's been sticking with me this week and it helps ground me in this truth: I am so fortunate that I get to be in this relationship with you.
+
+I love spending time with you—whether we're at home, out with our friends, dancing our asses off at a concert where we maybe know two songs, or traveling in different countries. It doesn't really matter what we're doing; I'm just happy to be with you.
+________
+
+My heart swells when I think about how you truly show up for me in every aspect—through both the good and the bad. Your ability to be so understanding, patient, and communicative leaves me in awe. I see you growing every day, and I'm so proud of the person you are; I feel incredibly lucky that you've included me in your life.
+
+I was always nervous about the first time I would cry in front of you, in fear that I would be a lot to deal with (and I'm sure I defo was.) My meltdown was a testament to your character; you are truly such an amazing partner and I'm so appreciative of you. You make me feel seen, heard, and cared for, no matter what situation we're in — one of many of my favorite things about you. 
+
+The tail end of last week was absolutely garbage - the bad days on Thursday and Friday mixed with a hefty tow were the straws that broke the camel's back and I really didn't have it within me to wall up my emotions. Whoops, compartmentalization failed me here! I hate crying (even though I think I'm the biggest crybaby on earth,) and you were beyond caring and patient - wiping my tears, holding me, and patiently hearing me out in all my nonsense!
+
+I'm working on being more expressive with these big feelings but you make it so much easier to take the first scary steps.
+________
+
+As we have always said, our friends and family are so important to us. I love that we are always aligned, but it's absolute tops that we greatly value the people in our lives.
+
+You didn't know past me, but my inner circle definitely does! My friends tell me how good you are for me and I have to agree wholeheartedly.
+
+I've been hardened and jaded about the idea of relationships; Victoria said it to you and I'll reiterate it again - I convinced myself that I could go the rest of my life without ever being in a relationship again; I avoid big, confusing feelings by nature, but since being with you, it's been light work to dismantle.
+
+From time to time, I think about you asking me on the car ride to LA about things I'm learning from you. While this isn't something you've directly taught me, I feel myself changing — actively opening up more, being more overt (verbally and nonverbally) showing my care towards people, the list goes on.
+
+I'm always stumped when people ask me what I like about you, and it's so hard to pick just one thing; I know your curiosity was peaked so I'll indulge you:
+
+Some of my favorite things about you
+
+Your care for me is palpable. All the things you do for me, small and big, do not go unnoticed. There's not a question in my mind how you feel about me - I know because you show it every day.
+You always seek to understand. With me, with other people, with things you don't know the full answer to - you ask such good questions not to look smart, but truly to understand the other. 
+Being in step with each other. I think this speaks for itself! We are aligned and that is just so hard to come by ❤️
+Adaptable. You adjust and change (within reason!) I see this when I give you feedback, but this also extends to you saying fuck it to your routine and letting me take up space, as well as making time to get to know my friends on a random Wednesday night. I know how much routine means to you, but you throwing it out the window for me on occasion means more than you know.
+Open to feedback. I always laugh when I think about how you would tell me you don't do well with receiving feedback - I have not once seen you take feedback poorly, both personally and professionally. Please revisit point 2. I see you wanting to be better every day and it makes me so proud of you
+Balance. I'm stealing your answer when Victoria asked you - I love how aligned we are in wanting to spend time together and having space to grow as individuals. I obviously miss you on days we aren't together, but some habits need to be formed apart for longevity reasons…and I'm in it for the long haul, baby!!
+Shower time. I love the way you look at me when you're brushing your teeth or we're letting the water warm up.
+The sound of you gagging when you're scraping your tongue - makes me laugh every time
+Reaching out to me in the middle of the night to hold my hand. Or to cuddle - best feeling ever (Pretty sure I make an audible sound when you do it)
+Touching me in bed. Mr. Funny Bizness knows what he's doing when your soft lady hands start rubbing me up and down.
+Efficient and timely. I love how prompt you are to move the cars at 6:45am, no more tickets PLEASE PLEASE PLEASE. Always optimizing for efficiency (when it matters.) You are so good at balancing this.
+Repeating things to-do over and over again. It's so cute seeing you run through your list of things to do, and stuff you want to get done.
+Blowing kisses goodbye. I HATE when we part ways temporarily but you're so open with your affection that I can't help but feel slightly better about us separating 🥹
+The way you smell. Especially after a shower because you stink sometimes! Kidding. You always smell so good, sans your gassy moments, which now that I'm writing it, are happening more often than not…
+Our whispered talks in bed. I love gibgabbing with you - I feel like we could talk for hours on end and not run out of topics. I love what you have to say and all of your stories recounted in excruciating detail.
+Assertiveness. It's so sexy when you tell me what you want when I ask you. I've been told I'm fickle sometimes, so I could defo learn a thing or two from you here. 
+Your outlook on life. You're softening me and I love seeing the world through your eyes and perspective. You are so easygoing and it quells my anxiety, so thank you for being so stable and a good foundation for me to rely on.
+
+
+I want you to know how committed I am to you - I know labels are important to you and they have grown on me, too. This partnership feels easy in all the right ways but challenges me to be better every day. There's so much to look forward to (New York, Palm Springs, CHELLAAAA, more days at home!) and I'm so happy that we get to do it together. Sharing our lives has been so fulfilling and heartwarming, I'm so excited to continue merging as the days go on!
+
+
+
+CANNOT WAIT TO SEE YOU LATER. You're the best, baby. PREPARE TO BE SICK OF ME!!!
+
+
+
+❤️,
+
+Your Stage 5 Clinger
+
+
+
+P.S. I forgot to add - when you write on the windshield and the wet shower door 🥰`,
+            to: 'Nate',
+            from: 'Emily'
+          }
+        ];
+        
+        // Try to load saved letters from storage
+        try {
+          const result = await window.storage.list('letter:');
+          if (result && result.keys && result.keys.length > 0) {
+            console.log(`📦 Found ${result.keys.length} saved letters in storage`);
+            const letterPromises = result.keys.map(async key => {
+              const data = await window.storage.get(key);
+              return data ? JSON.parse(data.value) : null;
+            });
+            const savedLetters = (await Promise.all(letterPromises)).filter(Boolean);
+            
+            // Merge saved letters with demo data
+            this.letters = [...savedLetters, ...this.letters];
+            this.letters.sort((a, b) => new Date(b.date) - new Date(a.date));
+            console.log(`✅ Total letters after merging: ${this.letters.length}`);
+          }
+        } catch (error) {
+          console.warn('Storage not available for letters:', error);
+        }
+        
+        console.log(`✅ Loaded ${this.letters.length} letters`);
       }
       
       async loadDemoData() {
@@ -1302,6 +2512,13 @@
         
         // Trigger the circular shuffle animation
         this.triggerCircularShuffleAnimation();
+        
+        // Show surprise postcard after landing animation completes (if not viewed yet)
+        if (!this.surpriseLetterViewed) {
+          setTimeout(() => {
+            this.showSurprisePostcard();
+          }, 2000); // Show after landing animation completes
+        }
       }
       
       triggerCircularShuffleAnimation() {
@@ -1343,6 +2560,32 @@
           this.enterScrapbook();
         });
         
+        // Navigation links
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const linkText = link.textContent.trim();
+            
+            // Update active state
+            navLinks.forEach(l => {
+              l.classList.remove('active');
+              l.classList.add('secondary');
+            });
+            link.classList.add('active');
+            link.classList.remove('secondary');
+            
+            // Switch view
+            if (linkText === 'memories') {
+              this.currentView = 'memories';
+              this.render();
+            } else if (linkText === 'letters') {
+              this.currentView = 'letters';
+              this.render();
+            }
+          });
+        });
+        
         // Create memory button
         document.getElementById('createMemoryBtn').addEventListener('click', () => {
           this.openCreateModal();
@@ -1373,6 +2616,29 @@
         document.getElementById('createMemoryForm').addEventListener('submit', async (e) => {
           e.preventDefault();
           await this.handleCreateMemory(e);
+        });
+        
+        // Mobile letter modal back button
+        document.getElementById('mobileLetterBackBtn').addEventListener('click', () => {
+          this.closeMobileLetterModal();
+        });
+        
+        // Surprise postcard interactions
+        const surprisePostcard = document.getElementById('surprisePostcard');
+        const surpriseCloseBtn = document.getElementById('surpriseCloseBtn');
+        
+        // Flip the postcard when clicking on it (but not the close button)
+        surprisePostcard.addEventListener('click', (e) => {
+          if (e.target === surpriseCloseBtn || e.target.closest('.surprise-close-btn')) {
+            return;
+          }
+          surprisePostcard.classList.toggle('flipped');
+        });
+        
+        // Close button - trigger fly away animation
+        surpriseCloseBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.closeSurprisePostcard();
         });
       }
       
@@ -1413,41 +2679,68 @@
         // Progressive disclosure: Show caption field only for photo/video
         const captionField = document.getElementById('captionField');
         const contentField = document.getElementById('memoryContent');
+        const contentLabel = document.querySelector('label[for="memoryContent"]');
         
         if (type === 'photo' || type === 'video') {
           captionField.style.display = 'block';
           contentField.placeholder = `URL to ${type}`;
+          if (contentLabel) contentLabel.textContent = 'Content';
         } else if (type === 'letter') {
           captionField.style.display = 'none';
-          contentField.placeholder = 'Your message...';
+          contentField.placeholder = 'Write your letter here...\n\nDear...\n\n(Your message)\n\nLove,\n(Your name)';
+          if (contentLabel) contentLabel.textContent = 'Letter Content';
         }
       }
       
       async handleCreateMemory(e) {
         const formData = new FormData(e.target);
-        const memoryData = {
-          id: 'memory_' + Date.now(),
-          type: formData.get('type'),
-          title: formData.get('title'),
-          date: formData.get('date'),
-          content: formData.get('content') || '',
-          caption: formData.get('caption') || ''
-        };
+        const type = formData.get('type');
         
         // Validate that a type is selected
-        if (!memoryData.type) {
+        if (!type) {
           alert('Please select a memory type');
           return;
         }
         
-        // Auto-save immediately
-        const saved = await this.saveMemory(memoryData);
-        
-        if (saved) {
-          // Close modal and re-render
-          this.closeCreateModal();
-          this.render();
-          console.log('Memory created and saved:', memoryData);
+        if (type === 'letter') {
+          // Create letter data
+          const letterData = {
+            id: 'letter_' + Date.now(),
+            type: 'letter',
+            title: formData.get('title'),
+            date: formData.get('date'),
+            content: formData.get('content') || '',
+            to: 'Someone Special', // Could add a field for this
+            from: 'Me' // Could add a field for this
+          };
+          
+          const saved = await this.saveLetter(letterData);
+          
+          if (saved) {
+            this.closeCreateModal();
+            this.currentView = 'letters';
+            this.render();
+            console.log('Letter created and saved:', letterData);
+          }
+        } else {
+          // Create memory data (photo/video)
+          const memoryData = {
+            id: 'memory_' + Date.now(),
+            type: type,
+            title: formData.get('title'),
+            date: formData.get('date'),
+            content: formData.get('content') || '',
+            caption: formData.get('caption') || ''
+          };
+          
+          const saved = await this.saveMemory(memoryData);
+          
+          if (saved) {
+            this.closeCreateModal();
+            this.currentView = 'memories';
+            this.render();
+            console.log('Memory created and saved:', memoryData);
+          }
         }
       }
       
@@ -1468,6 +2761,23 @@
         }
       }
       
+      async saveLetter(letterData) {
+        try {
+          // Save to storage immediately
+          await window.storage.set(`letter:${letterData.id}`, JSON.stringify(letterData));
+          
+          // Update in-memory array
+          this.addLetterToArray(letterData);
+          
+          console.log('Letter auto-saved successfully');
+          return true;
+        } catch (error) {
+          console.error('Letter save failed:', error);
+          alert('Failed to save letter. Please try again.');
+          return false;
+        }
+      }
+      
       addMemoryToArray(memoryData) {
         // Check if memory already exists
         const existingIndex = this.memories.findIndex(m => m.id === memoryData.id);
@@ -1481,9 +2791,22 @@
         this.memories.sort((a, b) => new Date(b.date) - new Date(a.date));
       }
       
+      addLetterToArray(letterData) {
+        // Check if letter already exists
+        const existingIndex = this.letters.findIndex(l => l.id === letterData.id);
+        if (existingIndex >= 0) {
+          this.letters[existingIndex] = letterData;
+        } else {
+          this.letters.push(letterData);
+        }
+        
+        // Re-sort chronologically (newest first)
+        this.letters.sort((a, b) => new Date(b.date) - new Date(a.date));
+      }
+      
       render() {
         console.log('=== RENDER START ===');
-        console.log(`Memories count: ${this.memories.length}`);
+        console.log(`Current view: ${this.currentView}`);
         
         const contentContainer = document.getElementById('app-content');
         if (!contentContainer) {
@@ -1491,11 +2814,19 @@
           return;
         }
         
-        console.log('Rendering carousel view');
-        contentContainer.innerHTML = this.renderCarouselView();
-        setTimeout(() => {
-          this.setupCarousel();
-        }, 100);
+        if (this.currentView === 'memories') {
+          console.log(`Rendering carousel view with ${this.memories.length} memories`);
+          contentContainer.innerHTML = this.renderCarouselView();
+          setTimeout(() => {
+            this.setupCarousel();
+          }, 100);
+        } else if (this.currentView === 'letters') {
+          console.log(`Rendering postcard view with ${this.letters.length} letters`);
+          contentContainer.innerHTML = this.renderPostcardView();
+          setTimeout(() => {
+            this.setupPostcardView();
+          }, 100);
+        }
         
         console.log('=== RENDER COMPLETE ===');
       }
@@ -2096,6 +3427,367 @@
         });
       }
       
+      renderPostcardView() {
+        if (this.letters.length === 0) {
+          return '<div class="content-placeholder"><p>No letters yet. Create your first one!</p></div>';
+        }
+        
+        return `
+          <div class="postcard-view">
+            <div class="postcard-stage" id="postcardStage"></div>
+          </div>
+        `;
+      }
+      
+      setupPostcardView() {
+        console.log('=== SETUP POSTCARD VIEW START ===');
+        
+        const stage = document.getElementById('postcardStage');
+        if (!stage) {
+          console.error('Postcard stage not found');
+          return;
+        }
+        
+        this.postcardCards = [];
+        
+        // Create postcard cards
+        for (let i = 0; i < this.letters.length; i++) {
+          const letter = this.letters[i];
+          const el = document.createElement('div');
+          el.className = 'postcard-card';
+          el.dataset.index = i;
+          el.style.display = 'none';
+          
+          // Create the card structure with front and back
+          el.innerHTML = `
+            <div class="postcard-inner">
+              <div class="postcard-front">
+                <div class="postcard-stamp">✉️</div>
+                <div class="postcard-divider"></div>
+                <div class="postcard-address">
+                  <div class="to-line">To:</div>
+                  <div>${letter.to || 'You'}</div>
+                </div>
+                <div class="flip-hint">click to read →</div>
+              </div>
+              <div class="postcard-back">
+                <div class="postcard-back-content">
+                  <div class="letter-date">${this.formatDate(letter.date)}</div>
+                  <div class="letter-title">${letter.title}</div>
+                  <div class="letter-body">${letter.content}</div>
+                </div>
+                <div class="flip-hint">← click to flip back</div>
+              </div>
+            </div>
+          `;
+          
+          // Add flip handler (desktop) or fullscreen modal (mobile)
+          const isMobile = window.matchMedia("(max-width: 768px)").matches;
+          el.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isMobile) {
+              this.openMobileLetterModal(letter);
+            } else {
+              el.classList.toggle('flipped');
+            }
+          });
+          
+          stage.appendChild(el);
+          this.postcardCards.push(el);
+        }
+        
+        console.log(`Created ${this.postcardCards.length} postcard cards`);
+        
+        // Update visible cards
+        this.updateVisiblePostcards();
+        
+        // Keyboard navigation
+        this.postcardKeyboardHandler = (e) => {
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            e.preventDefault();
+            if (e.key === 'ArrowRight') this.postcardNext();
+            if (e.key === 'ArrowLeft') this.postcardPrev();
+          }
+        };
+        document.addEventListener('keydown', this.postcardKeyboardHandler);
+        
+        // Swipe gestures
+        this.setupPostcardSwipe(stage);
+        
+        console.log('=== SETUP POSTCARD VIEW COMPLETE ===');
+      }
+      
+      updateVisiblePostcards() {
+        const index = this.postcardIndex;
+        const n = this.letters.length;
+        const VISIBLE_RANGE = 5;
+        
+        const visibleIndices = new Set();
+        for (let offset = -VISIBLE_RANGE; offset <= VISIBLE_RANGE; offset++) {
+          const idx = (index + offset + n) % n;
+          visibleIndices.add(idx);
+        }
+        
+        this.postcardCards.forEach((card, i) => {
+          if (visibleIndices.has(i)) {
+            if (card.style.display === 'none') {
+              card.style.display = 'block';
+              gsap.set(card, {
+                x: 0,
+                y: 0,
+                rotate: 0,
+                scale: 1,
+                opacity: 1,
+                transformOrigin: "50% 50%",
+                force3D: true
+              });
+            }
+          } else {
+            if (card.style.display !== 'none') {
+              gsap.to(card, { 
+                opacity: 0, 
+                duration: 0.2,
+                onComplete: () => {
+                  card.style.display = 'none';
+                }
+              });
+            }
+          }
+        });
+        
+        const isInitialLoad = !this.postcardInitialized;
+        requestAnimationFrame(() => this.layoutPostcards(false, isInitialLoad));
+        if (isInitialLoad) {
+          this.postcardInitialized = true;
+        }
+      }
+      
+      layoutPostcards(immediate = false, isInitialLoad = false) {
+        const n = this.postcardCards.length;
+        const index = this.postcardIndex;
+        
+        const PEEKS_EACH_SIDE = 2;
+        const BACK_VISIBLE = 3;
+        
+        const PEEK_X = 45;
+        const PEEK_Y = 12;
+        const PEEK_ROT = 5;
+        const PEEK_SCALE_STEP = 0.04;
+        
+        const BACK_DX = 8;
+        const BACK_DY = 8;
+        const BACK_Z = 30;
+        const BACK_ROT = -0.8;
+        
+        const signedDist = (i, idx) => {
+          let d = i - idx;
+          if (d > n / 2) d -= n;
+          if (d < -n / 2) d += n;
+          return d;
+        };
+        
+        this.postcardCards.forEach((card, i) => {
+          if (card.style.display === 'none') return;
+          
+          const d = signedDist(i, index);
+          const isTop = d === 0;
+          const isPeek = Math.abs(d) <= PEEKS_EACH_SIDE && !isTop;
+          
+          let x = 0, y = 0, z = 0, rz = 0, s = 1, o = 1, zIndex = 0;
+          
+          if (isTop) {
+            x = 0; y = 0; z = 0;
+            rz = 0;
+            s = 1;
+            o = 1;
+            zIndex = 1000;
+          } else if (isPeek) {
+            const step = Math.abs(d);
+            const dir = Math.sign(d);
+            
+            x = dir * (PEEK_X * step);
+            y = PEEK_Y * step;
+            z = -(step * 16);
+            rz = dir * (PEEK_ROT * step);
+            
+            s = 1 - (step * PEEK_SCALE_STEP);
+            o = 0.90 - (step * 0.06);
+            zIndex = 900 - step;
+          } else {
+            const depth = Math.abs(d);
+            
+            if (depth <= BACK_VISIBLE + PEEKS_EACH_SIDE) {
+              const backStep = depth - PEEKS_EACH_SIDE;
+              
+              x = backStep * BACK_DX;
+              y = backStep * BACK_DY;
+              z = -(backStep * BACK_Z);
+              rz = backStep * BACK_ROT;
+              
+              s = 1 - backStep * 0.03;
+              o = 0.70 - backStep * 0.10;
+              zIndex = 700 - backStep;
+            } else {
+              o = 0;
+              zIndex = 0;
+              z = -999;
+            }
+          }
+          
+          const props = {
+            x, y, z,
+            rotateZ: rz,
+            scale: s,
+            opacity: o,
+            zIndex,
+            duration: immediate ? 0 : (isInitialLoad ? 1 : 0.5),
+            ease: "power3.out",
+            force3D: true
+          };
+          
+          if (isInitialLoad) {
+            const depth = Math.abs(d);
+            props.delay = depth * 0.08;
+          }
+          
+          immediate ? gsap.set(card, props) : gsap.to(card, props);
+        });
+      }
+      
+      setupPostcardSwipe(stage) {
+        const canSwipe = window.matchMedia("(pointer: coarse)").matches;
+        
+        if (!canSwipe) {
+          console.log('Not a touch device, skipping swipe setup');
+          return;
+        }
+        
+        let startX = 0, startY = 0, dragging = false;
+        const SWIPE_MIN_PX = 35;
+        const SWIPE_MAX_Y = 60;
+        
+        stage.addEventListener("pointerdown", (e) => {
+          dragging = true;
+          startX = e.clientX;
+          startY = e.clientY;
+          stage.setPointerCapture(e.pointerId);
+        }, { passive: true });
+        
+        stage.addEventListener("pointerup", (e) => {
+          if (!dragging) return;
+          dragging = false;
+          
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+          
+          if (Math.abs(dy) > SWIPE_MAX_Y || Math.abs(dx) < SWIPE_MIN_PX) {
+            return;
+          }
+          
+          if (dx > 0) this.postcardNext();
+          else this.postcardPrev();
+        });
+      }
+      
+      postcardNext() {
+        const n = this.postcardCards.length;
+        this.postcardIndex = (this.postcardIndex + 1) % n;
+        
+        // Remove any flipped state from cards
+        this.postcardCards.forEach(card => card.classList.remove('flipped'));
+        
+        this.updateVisiblePostcards();
+      }
+      
+      postcardPrev() {
+        const n = this.postcardCards.length;
+        this.postcardIndex = (this.postcardIndex - 1 + n) % n;
+        
+        // Remove any flipped state from cards
+        this.postcardCards.forEach(card => card.classList.remove('flipped'));
+        
+        this.updateVisiblePostcards();
+      }
+      
+      formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+      }
+      
+      openMobileLetterModal(letter) {
+        const modal = document.getElementById('mobileLetterModal');
+        const content = document.getElementById('mobileLetterContent');
+        
+        // Populate the modal with letter content
+        content.innerHTML = `
+          <div class="mobile-letter-date">${this.formatDate(letter.date)}</div>
+          <div class="mobile-letter-title">${letter.title}</div>
+          <div class="mobile-letter-body">${letter.content}</div>
+        `;
+        
+        // Show the modal
+        modal.classList.add('active');
+        
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+      }
+      
+      closeMobileLetterModal() {
+        const modal = document.getElementById('mobileLetterModal');
+        modal.classList.remove('active');
+        
+        // Restore body scroll
+        document.body.style.overflow = '';
+      }
+      
+      showSurprisePostcard() {
+        // Find the special Valentine's letter
+        const specialLetter = this.letters.find(l => l.isSpecial);
+        if (!specialLetter) return;
+        
+        // Populate the letter content
+        const content = document.getElementById('surpriseLetterContent');
+        content.innerHTML = `
+          <div class="surprise-letter-date">${this.formatDate(specialLetter.date)}</div>
+          <div class="surprise-letter-title">${specialLetter.title}</div>
+          <div class="surprise-letter-body">${specialLetter.content}</div>
+        `;
+        
+        // Show the overlay
+        const overlay = document.getElementById('surprisePostcardOverlay');
+        overlay.classList.add('active');
+        
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+      }
+      
+      closeSurprisePostcard() {
+        const overlay = document.getElementById('surprisePostcardOverlay');
+        const postcard = document.getElementById('surprisePostcard');
+        
+        // Trigger fly away animation
+        postcard.classList.add('fly-away');
+        
+        // After animation completes, hide overlay and mark as viewed
+        setTimeout(() => {
+          overlay.classList.remove('active');
+          postcard.classList.remove('fly-away');
+          postcard.classList.remove('flipped');
+          
+          // Restore body scroll
+          document.body.style.overflow = '';
+          
+          // Mark as viewed
+          this.surpriseLetterViewed = true;
+          
+          // Optional: show a subtle notification that it's in the letters section
+          console.log('💌 The letter has been saved to your Letters section!');
+        }, 1200); // Match the fly-away animation duration
+      }
       
       
     }
