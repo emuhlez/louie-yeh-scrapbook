@@ -1316,36 +1316,47 @@
       
       /* Carousel view mobile adjustments */
       .carousel-view {
-        height: 60vh;
+        height: auto;
+        min-height: auto;
         margin: 0 -1rem;
-        padding: 1rem;
+        padding: 0 1rem;
+        padding-top: 200px;
+        align-items: flex-start;
+      }
+      
+      .carousel-stage {
+        height: 45vh;
       }
       
       .carousel-card {
-        max-width: clamp(160px, 65vw, 320px);
-        max-height: 50vh;
+        max-width: clamp(140px, 50vw, 280px);
+        max-height: 40vh;
       }
       
       .print img,
       .print video {
-        max-height: 50vh;
+        max-height: 40vh;
       }
       
       /* Caption mobile adjustments */
       .carousel-caption {
-        top: 70px;
+        top: 80px;
         transform: translateX(-50%);
-        padding: 0.5rem 1rem;
-        max-width: 90%;
+        padding: 0.75rem 1rem;
+        max-width: 85%;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 8px;
+        backdrop-filter: blur(10px);
       }
       
       .caption-text {
-        font-size: 0.95rem;
-        margin: 0 0 0.6rem 0;
+        font-size: 0.85rem;
+        margin: 0 0 0.5rem 0;
+        line-height: 1.4;
       }
       
       .caption-date {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
       }
       
       .caption-edit-btn {
