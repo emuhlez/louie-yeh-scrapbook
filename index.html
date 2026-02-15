@@ -1091,6 +1091,42 @@
       50% { transform: translateY(-20px); }
     }
     
+    .surprise-spotify-container {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      z-index: 20;
+      pointer-events: auto;
+    }
+    
+    .surprise-music-button {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .surprise-music-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .surprise-music-button.playing {
+      background: var(--text-primary);
+    }
+    
+    .surprise-spotify-iframe {
+      display: none;
+    }
+    
     /* ============================================
        MOBILE LETTER FULLSCREEN VIEW
        ============================================ */
@@ -1338,6 +1374,14 @@
         font-size: 3rem;
       }
       
+      .surprise-music-button {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+        top: 1rem;
+        left: 1rem;
+      }
+      
     }
   </style>
 </head>
@@ -1376,6 +1420,24 @@
   <div class="surprise-postcard-overlay" id="surprisePostcardOverlay">
     <div class="surprise-postcard" id="surprisePostcard">
       <button class="surprise-close-btn" id="surpriseCloseBtn">✕</button>
+      
+      <!-- Music button -->
+      <div class="surprise-spotify-container">
+        <button class="surprise-music-button" id="surpriseMusicBtn" title="Play Valentine">
+          🎵
+        </button>
+        <iframe id="spotifyPlayer" 
+                class="surprise-spotify-iframe"
+                src="https://open.spotify.com/embed/track/6qWGRBzQMq6DXovBZMSE9d?utm_source=generator&theme=0" 
+                width="0" 
+                height="0" 
+                frameBorder="0" 
+                allowfullscreen="" 
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                loading="lazy">
+        </iframe>
+      </div>
+      
       <div class="surprise-postcard-inner">
         <div class="surprise-postcard-front">
           <div class="surprise-envelope-icon">💌</div>
@@ -2626,10 +2688,27 @@ P.S. I forgot to add - when you write on the windshield and the wet shower door 
         // Surprise postcard interactions
         const surprisePostcard = document.getElementById('surprisePostcard');
         const surpriseCloseBtn = document.getElementById('surpriseCloseBtn');
+        const surpriseMusicBtn = document.getElementById('surpriseMusicBtn');
         
-        // Flip the postcard when clicking on it (but not the close button)
+        // Music button - start playing
+        surpriseMusicBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const spotifyPlayer = document.getElementById('spotifyPlayer');
+          
+          // Load with autoplay on first click
+          if (spotifyPlayer.src.indexOf('autoplay=1') === -1) {
+            spotifyPlayer.src = 'https://open.spotify.com/embed/track/6qWGRBzQMq6DXovBZMSE9d?utm_source=generator&autoplay=1&theme=0';
+            surpriseMusicBtn.classList.add('playing');
+            surpriseMusicBtn.textContent = '🔊';
+          }
+        });
+        
+        // Flip the postcard when clicking on it (but not the close button or music button)
         surprisePostcard.addEventListener('click', (e) => {
-          if (e.target === surpriseCloseBtn || e.target.closest('.surprise-close-btn')) {
+          if (e.target === surpriseCloseBtn || 
+              e.target.closest('.surprise-close-btn') ||
+              e.target === surpriseMusicBtn ||
+              e.target.closest('.surprise-music-button')) {
             return;
           }
           surprisePostcard.classList.toggle('flipped');
@@ -3761,6 +3840,11 @@ P.S. I forgot to add - when you write on the windshield and the wet shower door 
         const overlay = document.getElementById('surprisePostcardOverlay');
         overlay.classList.add('active');
         
+        // Reset music button state
+        const musicBtn = document.getElementById('surpriseMusicBtn');
+        musicBtn.classList.remove('playing');
+        musicBtn.textContent = '🎵';
+        
         // Prevent body scroll
         document.body.style.overflow = 'hidden';
       }
@@ -3768,6 +3852,15 @@ P.S. I forgot to add - when you write on the windshield and the wet shower door 
       closeSurprisePostcard() {
         const overlay = document.getElementById('surprisePostcardOverlay');
         const postcard = document.getElementById('surprisePostcard');
+        const spotifyPlayer = document.getElementById('spotifyPlayer');
+        const musicBtn = document.getElementById('surpriseMusicBtn');
+        
+        // Stop the music immediately
+        spotifyPlayer.src = 'https://open.spotify.com/embed/track/6qWGRBzQMq6DXovBZMSE9d?utm_source=generator&theme=0';
+        
+        // Reset music button
+        musicBtn.classList.remove('playing');
+        musicBtn.textContent = '🎵';
         
         // Trigger fly away animation
         postcard.classList.add('fly-away');
