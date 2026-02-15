@@ -3130,7 +3130,7 @@ P.S. I forgot to add - when you write on the windshield and the wet shower door 
                   mediaContent = `<img src="${memory.content}" alt="${memory.title}" decoding="async" />`;
                 } else if (memory.type === 'video' && memory.content) {
                   // Note: autoplay is handled by layoutCarousel() when card is centered
-                  mediaContent = `<video src="${memory.content}" muted playsinline webkit-playsinline loop preload="auto" controls></video>`;
+                  mediaContent = `<video src="${memory.content}" muted playsinline webkit-playsinline loop preload="metadata"></video>`;
                 } else {
                   mediaContent = `<div style="width:100%;height:100%;background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);"></div>`;
                 }
@@ -3254,7 +3254,7 @@ P.S. I forgot to add - when you write on the windshield and the wet shower door 
           const touch = e.changedTouches ? e.changedTouches[0] : e;
           const dx = touch.clientX - startX;
           const dy = touch.clientY - startY;
-          const duration = Date.now() - startTime;
+          const duration = Math.max(Date.now() - startTime, 1); // Prevent division by zero
           const velocity = Math.abs(dx) / duration;
           
           console.log(`Swipe ended: dx=${dx}, dy=${dy}, velocity=${velocity}`);
@@ -3987,7 +3987,7 @@ P.S. I forgot to add - when you write on the windshield and the wet shower door 
           const dx = touch.clientX - startX;
           const dy = touch.clientY - startY;
           const endTime = Date.now();
-          const duration = endTime - startTime;
+          const duration = Math.max(endTime - startTime, 1); // Prevent division by zero
           const velocity = Math.abs(dx) / duration;
           
           console.log(`Postcard swipe ended: dx=${dx}, dy=${dy}, velocity=${velocity}`);
