@@ -1,166 +1,658 @@
 {
-  "001_Original.jpg": "2026-01-02",
-  "016_Original.jpg": "2026-01-03",
-  "017_Original.jpg": "2026-01-03",
-  "024_Original.jpg": "2026-01-03",
-  "027_Original.jpg": "2026-01-03",
-  "055_Original.jpg": "2026-01-03",
-  "071_Original.jpg": "2026-01-03",
-  "114_Original.jpg": "2026-01-03",
-  "121_Original.jpg": "2026-01-03",
-  "142_Original.jpg": "2026-01-03",
-  "196_Original.jpg": "2026-01-03",
-  "211_Original.jpg": "2026-01-03",
-  "A20926B7-DE97-4E84-AB81-0748BE55DBDA.JPG": "2025-01-25",
-  "CIMG9720.jpg": "2025-04-12",
-  "IMG_0028.MOV": "2026-01-16",
-  "IMG_0043.JPG": "2026-01-15",
-  "IMG_0053.jpeg": "2025-01-12",
-  "IMG_0184.jpeg": "2026-02-07",
-  "IMG_0485.JPG": "2026-01-18",
-  "IMG_0488.jpeg": "2026-01-19",
-  "IMG_0526.jpeg": "2025-02-05",
-  "IMG_0536.jpeg": "2025-02-06",
-  "IMG_0808.jpeg": "2025-02-15",
-  "IMG_0890.jpeg": "2025-02-18",
-  "IMG_1002.jpeg": "2026-02-09",
-  "IMG_1011.JPG": "2025-02-21",
-  "IMG_1031.jpeg": "2026-02-11",
-  "IMG_1053.jpeg": "2026-02-12",
-  "IMG_1375.jpeg": "2025-03-06",
-  "IMG_1452.jpeg": "2025-03-08",
-  "IMG_1469.jpeg": "2025-03-08",
-  "IMG_1585.jpeg": "2025-03-16",
-  "IMG_1624.jpeg": "2025-03-21",
-  "IMG_1645.jpeg": "2024-11-25",
-  "IMG_1651.jpeg": "2024-11-25",
-  "IMG_1657.jpeg": "2026-02-13",
-  "IMG_1684.jpeg": "2025-03-23",
-  "IMG_2163.jpeg": "2025-03-25",
-  "IMG_2205.MOV": "2025-03-28",
-  "IMG_2449.jpeg": "2025-04-13",
-  "IMG_2953.jpeg": "2025-01-01",
-  "IMG_2978.jpeg": "2024-11-02",
-  "IMG_2979 2.jpeg": "2025-04-13",
-  "IMG_2979.jpeg": "2024-11-02",
-  "IMG_3013.jpeg": "2025-04-13",
-  "IMG_3064.jpeg": "2025-04-14",
-  "IMG_3082 2.jpeg": "2025-04-14",
-  "IMG_3126.jpeg": "2025-04-14",
-  "IMG_3149.jpeg": "2025-04-14",
-  "IMG_3261.jpeg": "2025-04-20",
-  "IMG_3263.jpeg": "2025-04-20",
-  "IMG_3267.jpeg": "2025-04-20",
-  "IMG_3324.JPG": "2025-04-22",
-  "IMG_3384.JPG": "2025-04-22",
-  "IMG_3522.jpeg": "2025-04-29",
-  "IMG_3570.jpeg": "2025-05-03",
-  "IMG_3583.jpeg": "2025-05-04",
-  "IMG_3631.jpeg": "2025-05-07",
-  "IMG_3668.jpeg": "2025-05-11",
-  "IMG_4003.jpeg": "2025-05-21",
-  "IMG_4053.jpeg": "2025-11-09",
-  "IMG_4064.jpeg": "2025-01-01",
-  "IMG_4146.jpeg": "2025-05-23",
-  "IMG_4246 2.jpeg": "2025-05-29",
-  "IMG_4289.jpeg": "2025-05-26",
-  "IMG_4310.jpeg": "2025-06-01",
-  "IMG_4430.jpeg": "2025-06-06",
-  "IMG_4443.jpeg": "2025-06-06",
-  "IMG_4533.MOV": "2025-06-07",
-  "IMG_4652.jpeg": "2025-06-07",
-  "IMG_4682.jpeg": "2025-06-25",
-  "IMG_4699.jpeg": "2025-06-07",
-  "IMG_5014.JPG": "2025-06-07",
-  "IMG_5055.jpeg": "2025-06-19",
-  "IMG_5101.jpeg": "2025-06-20",
-  "IMG_5116.jpeg": "2025-06-21",
-  "IMG_5209.jpeg": "2025-06-24",
-  "IMG_5222.jpeg": "2025-06-24",
-  "IMG_5274.jpeg": "2025-06-29",
-  "IMG_5353.jpeg": "2025-07-06",
-  "IMG_5379.jpeg": "2025-07-09",
-  "IMG_5783.jpeg": "2025-08-05",
-  "IMG_5840.jpeg": "2025-08-10",
-  "IMG_5899.jpeg": "2025-08-14",
-  "IMG_6006.jpeg": "2025-04-27",
-  "IMG_6307.jpeg": "2025-09-07",
-  "IMG_6349.jpeg": "2025-09-11",
-  "IMG_6396.jpeg": "2025-09-12",
-  "IMG_6397.MOV": "2025-09-12",
-  "IMG_6646.jpeg": "2025-09-27",
-  "IMG_6648.jpeg": "2025-09-27",
-  "IMG_6789.jpeg": "2025-10-06",
-  "IMG_6825.jpeg": "2025-10-07",
-  "IMG_6844.jpeg": "2025-10-08",
-  "IMG_6957.jpeg": "2025-10-14",
-  "IMG_7043.jpeg": "2025-10-17",
-  "IMG_7051.jpeg": "2025-10-17",
-  "IMG_7064.jpeg": "2025-10-18",
-  "IMG_7146.jpeg": "2024-11-24",
-  "IMG_7308.jpeg": "2025-11-01",
-  "IMG_7435.jpg": "2025-11-08",
-  "IMG_7506.jpeg": "2024-12-08",
-  "IMG_7535.jpeg": "2025-11-09",
-  "IMG_7600.jpeg": "2024-12-14",
-  "IMG_7687.jpeg": "2025-11-14",
-  "IMG_7718.jpeg": "2025-11-15",
-  "IMG_7734.jpeg": "2024-12-19",
-  "IMG_7791.jpeg": "2025-04-13",
-  "IMG_7824.jpeg": "2025-11-17",
-  "IMG_7827.JPG": "2025-11-17",
-  "IMG_8316.jpeg": "2025-12-13",
-  "IMG_8346.jpg": "2025-12-13",
-  "IMG_8389.jpeg": "2025-12-07",
-  "IMG_8468.jpeg": "2025-11-12",
-  "IMG_8548.jpeg": "2025-12-13",
-  "IMG_8553.jpeg": "2025-12-13",
-  "IMG_8561.jpeg": "2025-12-13",
-  "IMG_8583.MOV": "2025-12-14",
-  "IMG_8626.JPG": "2025-12-17",
-  "IMG_8627.JPG": "2025-12-17",
-  "IMG_8628.JPG": "2025-12-17",
-  "IMG_8634.JPG": "2025-12-17",
-  "IMG_8636.JPG": "2025-12-17",
-  "IMG_8690.jpeg": "2024-12-28",
-  "IMG_8701.jpeg": "2025-12-21",
-  "IMG_8746.jpeg": "2025-12-22",
-  "IMG_8821.jpeg": "2025-12-24",
-  "IMG_8823.jpeg": "2025-12-24",
-  "IMG_8849.jpeg": "2025-12-25",
-  "IMG_8860.JPG": "2025-12-07",
-  "IMG_8897.jpeg": "2025-12-25",
-  "IMG_8901.jpeg": "2025-01-25",
-  "IMG_8908.jpeg": "2025-01-25",
-  "IMG_8926.jpeg": "2025-12-26",
-  "IMG_8952.jpeg": "2025-12-26",
-  "IMG_8976.MOV": "2025-12-25",
-  "IMG_8995.JPG": "2026-01-14",
-  "IMG_9014.jpeg": "2025-12-26",
-  "IMG_9021.jpeg": "2025-12-26",
-  "IMG_9033.jpeg": "2025-12-26",
-  "IMG_9036.jpeg": "2025-12-26",
-  "IMG_9057.jpeg": "2025-12-27",
-  "IMG_9090.jpeg": "2025-12-27",
-  "IMG_9111.jpeg": "2025-12-27",
-  "IMG_9122.jpeg": "2025-12-27",
-  "IMG_9187.jpeg": "2025-12-29",
-  "IMG_9229.jpeg": "2025-12-30",
-  "IMG_9257.jpeg": "2025-12-31",
-  "IMG_9294.jpeg": "2026-01-01",
-  "IMG_9303.JPG": "2026-01-17",
-  "IMG_9309.jpeg": "2026-01-01",
-  "IMG_9317.MOV": "2026-01-01",
-  "IMG_9340.jpeg": "2025-12-26",
-  "IMG_9356.jpeg": "2026-01-03",
-  "IMG_9378.jpeg": "2026-01-03",
-  "IMG_9442.JPG": "2026-01-18",
-  "IMG_9459.JPG": "2026-01-18",
-  "IMG_9880.jpeg": "2026-01-10",
-  "IMG_9925.jpeg": "2026-01-14",
-  "IMG_9933.jpg": "2025-01-10",
-  "IMG_9989.jpeg": "2026-01-15",
-  "ScreenRecording_06-20-2025 21-16-11_1.mov": "2025-06-21",
-  "Video Nov 08 2025, 5 12 28 PM.MOV": "2025-11-09",
-  "Video Nov 08 2025, 7 45 13 PM.MOV": "2025-11-09"
+  "001_Original.jpg": {
+    "date": "2026-01-02",
+    "caption": "my new fav photo of us"
+  },
+  "016_Original.jpg": {
+    "date": "2026-01-03",
+    "caption": ""
+  },
+  "017_Original.jpg": {
+    "date": "2026-01-03",
+    "caption": ""
+  },
+  "024_Original.jpg": {
+    "date": "2026-01-03",
+    "caption": ""
+  },
+  "027_Original.jpg": {
+    "date": "2026-01-03",
+    "caption": ""
+  },
+  "055_Original.jpg": {
+    "date": "2026-01-03",
+    "caption": ""
+  },
+  "071_Original.jpg": {
+    "date": "2026-01-03",
+    "caption": ""
+  },
+  "114_Original.jpg": {
+    "date": "2026-01-03",
+    "caption": ""
+  },
+  "121_Original.jpg": {
+    "date": "2026-01-03",
+    "caption": ""
+  },
+  "142_Original.jpg": {
+    "date": "2026-01-03",
+    "caption": ""
+  },
+  "196_Original.jpg": {
+    "date": "2026-01-03",
+    "caption": ""
+  },
+  "211_Original.jpg": {
+    "date": "2026-01-03",
+    "caption": ""
+  },
+  "A20926B7-DE97-4E84-AB81-0748BE55DBDA.JPG": {
+    "date": "2025-01-25",
+    "caption": "i love our life!"
+  },
+  "CIMG9720.jpg": {
+    "date": "2025-04-12",
+    "caption": "coachella day 1 together"
+  },
+  "IMG_0028.MOV": {
+    "date": "2026-01-16",
+    "caption": "HEY! THATS FOR ME TO TOUCH!"
+  },
+  "IMG_0043.JPG": {
+    "date": "2026-01-15",
+    "caption": "casa emilia"
+  },
+  "IMG_0053.jpeg": {
+    "date": "2025-01-12",
+    "caption": "mile trial"
+  },
+  "IMG_0184.jpeg": {
+    "date": "2026-02-07",
+    "caption": "calvin harris with the hauuss; our one event per year with everyone out"
+  },
+  "IMG_0485.JPG": {
+    "date": "2026-01-18",
+    "caption": "running joke was that we look like we're just pals, but we sure as hell aint just pals!!!"
+  },
+  "IMG_0488.jpeg": {
+    "date": "2026-01-19",
+    "caption": "aguardiente <3"
+  },
+  "IMG_0526.jpeg": {
+    "date": "2025-02-05",
+    "caption": "rika's mom was visiting and you still had a functional-ish back to carry miss goosey"
+  },
+  "IMG_0536.jpeg": {
+    "date": "2025-02-06",
+    "caption": "beating u at fire tower"
+  },
+  "IMG_0808.jpeg": {
+    "date": "2025-02-15",
+    "caption": "valentine's day dinner last year! so yummy and can't wait to make this again on monday"
+  },
+  "IMG_0890.jpeg": {
+    "date": "2025-02-18",
+    "caption": "the beginning of our ice machine issues"
+  },
+  "IMG_1002.jpeg": {
+    "date": "2026-02-09",
+    "caption": "fluffy girl at the park!"
+  },
+  "IMG_1011.JPG": {
+    "date": "2025-02-21",
+    "caption": "our beautiful life"
+  },
+  "IMG_1031.jpeg": {
+    "date": "2026-02-11",
+    "caption": "me and baby at home"
+  },
+  "IMG_1053.jpeg": {
+    "date": "2026-02-12",
+    "caption": "OUR BABY!!!! thank you for always entrusting me with her"
+  },
+  "IMG_1375.jpeg": {
+    "date": "2025-03-06",
+    "caption": "our first new york trip together! we got yummy empanadas in the rain after that shit ass pizza jack recommended"
+  },
+  "IMG_1452.jpeg": {
+    "date": "2025-03-08",
+    "caption": "my besties together!!!"
+  },
+  "IMG_1469.jpeg": {
+    "date": "2025-03-08",
+    "caption": "jcao's birthday party at mr melo <3"
+  },
+  "IMG_1585.jpeg": {
+    "date": "2025-03-16",
+    "caption": "me thinks this is the beginning of our big back era. we watched mickey17 and stacked up on wetzel's and popcorn...and now we can't go back..."
+  },
+  "IMG_1624.jpeg": {
+    "date": "2025-03-21",
+    "caption": "taking me to the palm springs urgent care after having the most lethal stomachache of my life. thank you for always taking care of me; being in pain sucks but doing it together is just the best"
+  },
+  "IMG_1645.jpeg": {
+    "date": "2024-11-25",
+    "caption": "never forgetting how much you and tim were screaming on the ferris wheel"
+  },
+  "IMG_1651.jpeg": {
+    "date": "2024-11-25",
+    "caption": "california adventure - i was so grateful that you stayed and tried to keep up with my freak <3"
+  },
+  "IMG_1657.jpeg": {
+    "date": "2026-02-13",
+    "caption": "0.5x disney! first of many disney adventures"
+  },
+  "IMG_1684.jpeg": {
+    "date": "2025-03-23",
+    "caption": "angelene and jackson's wedding as your capital P Partner"
+  },
+  "IMG_2163.jpeg": {
+    "date": "2025-03-25",
+    "caption": "i have this on my fridge and it's one of my favorite photos of us"
+  },
+  "IMG_2205.MOV": {
+    "date": "2025-03-28",
+    "caption": "what that back do !"
+  },
+  "IMG_2449.jpeg": {
+    "date": "2025-04-13",
+    "caption": ""
+  },
+  "IMG_2953.jpeg": {
+    "date": "2025-01-01",
+    "caption": "tiny world once again!! how lucky and privileged are we to have friends that we can meet halfway across the world"
+  },
+  "IMG_2978.jpeg": {
+    "date": "2024-11-02",
+    "caption": "kaytranada~ what an insanely busy weekend but this was so fun to experience this with you + penthaus"
+  },
+  "IMG_2979 2.jpeg": {
+    "date": "2025-04-13",
+    "caption": ""
+  },
+  "IMG_2979.jpeg": {
+    "date": "2024-11-02",
+    "caption": "our first photo together <3"
+  },
+  "IMG_3013.jpeg": {
+    "date": "2025-04-13",
+    "caption": "the first and last time i got a shoulder ride from u"
+  },
+  "IMG_3064.jpeg": {
+    "date": "2025-04-14",
+    "caption": "my girls!!!!"
+  },
+  "IMG_3082 2.jpeg": {
+    "date": "2025-04-14",
+    "caption": "all my favorite people in one photo! that does not happen often"
+  },
+  "IMG_3126.jpeg": {
+    "date": "2025-04-14",
+    "caption": "zedd! i dont remember much except that i was my happiest sitting on the grass with u"
+  },
+  "IMG_3149.jpeg": {
+    "date": "2025-04-14",
+    "caption": "hehe i love this photo too"
+  },
+  "IMG_3261.jpeg": {
+    "date": "2025-04-20",
+    "caption": "after kevin broke the mirror - fun house mirror!"
+  },
+  "IMG_3263.jpeg": {
+    "date": "2025-04-20",
+    "caption": "big backing after the easter service in the park lol"
+  },
+  "IMG_3267.jpeg": {
+    "date": "2025-04-20",
+    "caption": "easter walk in ggp and we big backed once again...what's new!"
+  },
+  "IMG_3324.JPG": {
+    "date": "2025-04-22",
+    "caption": "my contact photo for u with our scraggly girl"
+  },
+  "IMG_3384.JPG": {
+    "date": "2025-04-22",
+    "caption": "jonny's 27th birthday bbq <3 tiny little world"
+  },
+  "IMG_3522.jpeg": {
+    "date": "2025-04-29",
+    "caption": "goosey with duck under the bed"
+  },
+  "IMG_3570.jpeg": {
+    "date": "2025-05-03",
+    "caption": "OUR FIRST TIME AT PINECREST and we went back again that night"
+  },
+  "IMG_3583.jpeg": {
+    "date": "2025-05-04",
+    "caption": "marina green walk with our sweet darling girl"
+  },
+  "IMG_3631.jpeg": {
+    "date": "2025-05-07",
+    "caption": "baby's first time at my house"
+  },
+  "IMG_3668.jpeg": {
+    "date": "2025-05-11",
+    "caption": "hermes cooked for us and it was DELICIOUS! i love how well you integrated into my life as i have yours"
+  },
+  "IMG_4003.jpeg": {
+    "date": "2025-05-21",
+    "caption": "came back from new york while you were in tulum to take care of our baby"
+  },
+  "IMG_4053.jpeg": {
+    "date": "2025-11-09",
+    "caption": "miso kissies!!!"
+  },
+  "IMG_4064.jpeg": {
+    "date": "2025-01-01",
+    "caption": "i dont remember anything so thank u for taking care of me ALWAYS"
+  },
+  "IMG_4146.jpeg": {
+    "date": "2025-05-23",
+    "caption": ""
+  },
+  "IMG_4246 2.jpeg": {
+    "date": "2025-05-29",
+    "caption": "this photo never fails to make me laugh so much"
+  },
+  "IMG_4289.jpeg": {
+    "date": "2025-05-26",
+    "caption": "park day!!!"
+  },
+  "IMG_4310.jpeg": {
+    "date": "2025-06-01",
+    "caption": "our celebration before surgery! one of my favorite meals and i love that we get to share these wonderful amazing experiences together. you make everything so much better!!"
+  },
+  "IMG_4430.jpeg": {
+    "date": "2025-06-06",
+    "caption": "fishing with jack"
+  },
+  "IMG_4443.jpeg": {
+    "date": "2025-06-06",
+    "caption": "galena lake!! never forget all the fishies nipping at us"
+  },
+  "IMG_4533.MOV": {
+    "date": "2025-06-07",
+    "caption": "we love hot dogs!!!"
+  },
+  "IMG_4652.jpeg": {
+    "date": "2025-06-07",
+    "caption": ""
+  },
+  "IMG_4682.jpeg": {
+    "date": "2025-06-25",
+    "caption": "discharge day!!!"
+  },
+  "IMG_4699.jpeg": {
+    "date": "2025-06-07",
+    "caption": "flicking the bean"
+  },
+  "IMG_5014.JPG": {
+    "date": "2025-06-07",
+    "caption": "architecture boat ride! thank you for always being down to do my crazy ideas and endorsing it"
+  },
+  "IMG_5055.jpeg": {
+    "date": "2025-06-19",
+    "caption": "the day before surgery and we played a bit of tennis and squeezed u in the back with gooseykins"
+  },
+  "IMG_5101.jpeg": {
+    "date": "2025-06-20",
+    "caption": "SURGERY DAY!!!!"
+  },
+  "IMG_5116.jpeg": {
+    "date": "2025-06-21",
+    "caption": "wake up and hang out w me!!!!"
+  },
+  "IMG_5209.jpeg": {
+    "date": "2025-06-24",
+    "caption": ""
+  },
+  "IMG_5222.jpeg": {
+    "date": "2025-06-24",
+    "caption": "me and goosey at home while you were resting and recovering at the hospital"
+  },
+  "IMG_5274.jpeg": {
+    "date": "2025-06-29",
+    "caption": "our little detective"
+  },
+  "IMG_5353.jpeg": {
+    "date": "2025-07-06",
+    "caption": "the infamous and divisive mustache; i personally miss her so much. i miss us watching movies late into the night and getting to spend so much time together while you were recovering - i hated seeing you in so much pain but wouldn't change that bonding experience for anything in the world"
+  },
+  "IMG_5379.jpeg": {
+    "date": "2025-07-09",
+    "caption": "silly goosey watching love island with us! a big part of the recovery process in surgery. miss those days"
+  },
+  "IMG_5783.jpeg": {
+    "date": "2025-08-05",
+    "caption": "your 28th birthday! i love celebrating you and can't wait for the big blowout party this year"
+  },
+  "IMG_5840.jpeg": {
+    "date": "2025-08-10",
+    "caption": "niku birthday celebration with just the two of us"
+  },
+  "IMG_5899.jpeg": {
+    "date": "2025-08-14",
+    "caption": "i miss you wearing the double vest - pre-mexico trip!!"
+  },
+  "IMG_6006.jpeg": {
+    "date": "2025-04-27",
+    "caption": "one of my favorite days last year <3 we had kicking crab with natalie, took a fat nap, and i was on BV medication looool what a day!"
+  },
+  "IMG_6307.jpeg": {
+    "date": "2025-09-07",
+    "caption": "meeting smorgadoo and kaden"
+  },
+  "IMG_6349.jpeg": {
+    "date": "2025-09-11",
+    "caption": "trying new food - bouche, down the street"
+  },
+  "IMG_6396.jpeg": {
+    "date": "2025-09-12",
+    "caption": "yes i had to include a photo because this was life changing and we've gone twice but i still think about this often"
+  },
+  "IMG_6397.MOV": {
+    "date": "2025-09-12",
+    "caption": "another video of us eating - niku philly cheesesteaks YUMMMMYYY"
+  },
+  "IMG_6646.jpeg": {
+    "date": "2025-09-27",
+    "caption": "let's go back soon please!!!! i want to try other stuff hehe"
+  },
+  "IMG_6648.jpeg": {
+    "date": "2025-09-27",
+    "caption": "celebrating one year since our first date. i love going on dates together and i love our home life. doing anything and everything with you gives me so much joy in life"
+  },
+  "IMG_6789.jpeg": {
+    "date": "2025-10-06",
+    "caption": "campus recruiting at usc and of course our first stop is your favorite restaurant in the entire freaking world"
+  },
+  "IMG_6825.jpeg": {
+    "date": "2025-10-07",
+    "caption": "fight on with my lil trojan for the day"
+  },
+  "IMG_6844.jpeg": {
+    "date": "2025-10-08",
+    "caption": "wurstkuche - we were walking around after ave26 tacos in the arts district and of course, we MUST have the most iconic hot dog in la"
+  },
+  "IMG_6957.jpeg": {
+    "date": "2025-10-14",
+    "caption": "photo booth strip after the haunted house walk through with navan folks"
+  },
+  "IMG_7043.jpeg": {
+    "date": "2025-10-17",
+    "caption": "ill have what shes having!!!!!"
+  },
+  "IMG_7051.jpeg": {
+    "date": "2025-10-17",
+    "caption": "natey's first katz deli"
+  },
+  "IMG_7064.jpeg": {
+    "date": "2025-10-18",
+    "caption": "what a crazy night hitting up angel's share and walking around manhattan with my favorite bibo"
+  },
+  "IMG_7146.jpeg": {
+    "date": "2024-11-24",
+    "caption": "honeymee with meehoney"
+  },
+  "IMG_7308.jpeg": {
+    "date": "2025-11-01",
+    "caption": "halloweenie"
+  },
+  "IMG_7435.jpg": {
+    "date": "2025-11-08",
+    "caption": "awkaog boyfriend/husband photo imitating the 6 of us in middle school"
+  },
+  "IMG_7506.jpeg": {
+    "date": "2024-12-08",
+    "caption": "the beginning of us being tied to the hip (and you wearing all mi clothes)"
+  },
+  "IMG_7535.jpeg": {
+    "date": "2025-11-09",
+    "caption": "<3 my designated plus one"
+  },
+  "IMG_7600.jpeg": {
+    "date": "2024-12-14",
+    "caption": "santacon!! i cannot believe how small our world is sometimes"
+  },
+  "IMG_7687.jpeg": {
+    "date": "2025-11-14",
+    "caption": "baby's first proper haircut in like eons"
+  },
+  "IMG_7718.jpeg": {
+    "date": "2025-11-15",
+    "caption": "long ass line for this mid burrito place but time is nothing with you"
+  },
+  "IMG_7734.jpeg": {
+    "date": "2024-12-19",
+    "caption": "being sick together is one of my fondest memories. rip this starbucks but thankful for this time together"
+  },
+  "IMG_7791.jpeg": {
+    "date": "2025-04-13",
+    "caption": "day 2!!!"
+  },
+  "IMG_7824.jpeg": {
+    "date": "2025-11-17",
+    "caption": "im obsessed with her"
+  },
+  "IMG_7827.JPG": {
+    "date": "2025-11-17",
+    "caption": "the best birthday <3 i love that you go above and beyond to be so thoughtful and make me feel like the luckiest girl on earth everyday!"
+  },
+  "IMG_8316.jpeg": {
+    "date": "2025-12-13",
+    "caption": "triplets!!!"
+  },
+  "IMG_8346.jpg": {
+    "date": "2025-12-13",
+    "caption": "family photo <3 our life is really rooted in the people around us and im so grateful we have all these people in our village"
+  },
+  "IMG_8389.jpeg": {
+    "date": "2025-12-07",
+    "caption": "josef talks about you helping him walk a lot - people always talk about how kind their partners are but you truly are the kindest person i know"
+  },
+  "IMG_8468.jpeg": {
+    "date": "2025-11-12",
+    "caption": "you made my birthday so great <3 i appreciate u beyond"
+  },
+  "IMG_8548.jpeg": {
+    "date": "2025-12-13",
+    "caption": "roblox holiday party!!! come again w me next year?"
+  },
+  "IMG_8553.jpeg": {
+    "date": "2025-12-13",
+    "caption": ""
+  },
+  "IMG_8561.jpeg": {
+    "date": "2025-12-13",
+    "caption": "our photogenic girl on christmas"
+  },
+  "IMG_8583.MOV": {
+    "date": "2025-12-14",
+    "caption": "49ers game that you got sick at - mayhaps this put u in the pain cave"
+  },
+  "IMG_8626.JPG": {
+    "date": "2025-12-17",
+    "caption": ""
+  },
+  "IMG_8627.JPG": {
+    "date": "2025-12-17",
+    "caption": ""
+  },
+  "IMG_8628.JPG": {
+    "date": "2025-12-17",
+    "caption": "proud to be the first lady to the mayor of navan"
+  },
+  "IMG_8634.JPG": {
+    "date": "2025-12-17",
+    "caption": ""
+  },
+  "IMG_8636.JPG": {
+    "date": "2025-12-17",
+    "caption": "me and the navanians <3"
+  },
+  "IMG_8690.jpeg": {
+    "date": "2024-12-28",
+    "caption": "our little daan park meet up"
+  },
+  "IMG_8701.jpeg": {
+    "date": "2025-12-21",
+    "caption": "hermes party - i love that you are always always down to dress up and stay in theme...unlike the other people and the host himself..."
+  },
+  "IMG_8746.jpeg": {
+    "date": "2025-12-22",
+    "caption": "OUR FIRST INTERNATIONAL TRIP! gosh what a trip this was; long flights go by so quickly with you by my side"
+  },
+  "IMG_8821.jpeg": {
+    "date": "2025-12-24",
+    "caption": ""
+  },
+  "IMG_8823.jpeg": {
+    "date": "2025-12-24",
+    "caption": "dusit thani kyoto! you look extra cute here"
+  },
+  "IMG_8849.jpeg": {
+    "date": "2025-12-25",
+    "caption": "kicking it with nathan and steph in kyoto"
+  },
+  "IMG_8860.JPG": {
+    "date": "2025-12-07",
+    "caption": "cheering at my marathon!! i can always count on u to show up for me <3 i am so beyond grateful for u it makes me teary just thinking about it"
+  },
+  "IMG_8897.jpeg": {
+    "date": "2025-12-25",
+    "caption": "merry christmas to u my baby!!!"
+  },
+  "IMG_8901.jpeg": {
+    "date": "2025-01-25",
+    "caption": "baby girl!!!"
+  },
+  "IMG_8908.jpeg": {
+    "date": "2025-01-25",
+    "caption": "the first of many ggp days"
+  },
+  "IMG_8926.jpeg": {
+    "date": "2025-12-26",
+    "caption": ""
+  },
+  "IMG_8952.jpeg": {
+    "date": "2025-12-26",
+    "caption": "going crazyyyy at team lab eggs"
+  },
+  "IMG_8976.MOV": {
+    "date": "2025-12-25",
+    "caption": "our little christmas excursion at teamlab kyoto and seeing our little drawings on the screen. so much fun"
+  },
+  "IMG_8995.JPG": {
+    "date": "2026-01-14",
+    "caption": "cartagena night one! you had an insane headache but now we have colombian headache medication, yippee!"
+  },
+  "IMG_9014.jpeg": {
+    "date": "2025-12-26",
+    "caption": "the infamous colonel sanders"
+  },
+  "IMG_9021.jpeg": {
+    "date": "2025-12-26",
+    "caption": "trekking to the bus stop!"
+  },
+  "IMG_9033.jpeg": {
+    "date": "2025-12-26",
+    "caption": ""
+  },
+  "IMG_9036.jpeg": {
+    "date": "2025-12-26",
+    "caption": "arashiyama forest - it was so fucking cold this day but i loved going to the forest b2b temple with you"
+  },
+  "IMG_9057.jpeg": {
+    "date": "2025-12-27",
+    "caption": "my handsome boy"
+  },
+  "IMG_9090.jpeg": {
+    "date": "2025-12-27",
+    "caption": "fushimi inari - i loved seeing the sunset with you after the hike up and running down with you so we can get dinner (curry and tempura at koisus)"
+  },
+  "IMG_9111.jpeg": {
+    "date": "2025-12-27",
+    "caption": "thank u sensei"
+  },
+  "IMG_9122.jpeg": {
+    "date": "2025-12-27",
+    "caption": "delicious dusit thani breakfasts; i was so deathly ill but i will NEVER pass up sharing a meal with you"
+  },
+  "IMG_9187.jpeg": {
+    "date": "2025-12-29",
+    "caption": "bellwood!! once again, making friends everywhere"
+  },
+  "IMG_9229.jpeg": {
+    "date": "2025-12-30",
+    "caption": "sitting at the park waiting for me to go peepee"
+  },
+  "IMG_9257.jpeg": {
+    "date": "2025-12-31",
+    "caption": "at the ORIGINAL coco ichibanya"
+  },
+  "IMG_9294.jpeg": {
+    "date": "2026-01-01",
+    "caption": "seriously one of my favorite days. i wish for us to have a beautiful, happy new year and i cannot wait to spend it together ONCE AGAIN!!!"
+  },
+  "IMG_9303.JPG": {
+    "date": "2026-01-17",
+    "caption": "daniella and kevin's welcome party at the rooftop of our hotel - never EVER show me aguardiente ever again"
+  },
+  "IMG_9309.jpeg": {
+    "date": "2026-01-01",
+    "caption": "BOO!!!!"
+  },
+  "IMG_9317.MOV": {
+    "date": "2026-01-01",
+    "caption": "tokyo disneysea with my mike <3 i love disney and you make it all the more fun"
+  },
+  "IMG_9340.jpeg": {
+    "date": "2025-12-26",
+    "caption": "our friend!! at the best meal of our lives... i love how easy it is for u to make friends with people. it warms me so much!"
+  },
+  "IMG_9356.jpeg": {
+    "date": "2026-01-03",
+    "caption": "post photoshoot, after donki, walking to get mos burger, SNOWING in tokyo? what a treat"
+  },
+  "IMG_9378.jpeg": {
+    "date": "2026-01-03",
+    "caption": "dad walk to get pizza on your last day in japan"
+  },
+  "IMG_9442.JPG": {
+    "date": "2026-01-18",
+    "caption": ""
+  },
+  "IMG_9459.JPG": {
+    "date": "2026-01-18",
+    "caption": "daniella and kevin's reception - love us not taking any photos seriously"
+  },
+  "IMG_9880.jpeg": {
+    "date": "2026-01-10",
+    "caption": "post japan try-on haul with our baby goose"
+  },
+  "IMG_9925.jpeg": {
+    "date": "2026-01-14",
+    "caption": "maybe one day you'll be able to pull off a bandana without making me laugh but this is just too good"
+  },
+  "IMG_9933.jpg": {
+    "date": "2025-01-10",
+    "caption": "NEW YEAR! yippee who knew we would have an insanely fun year ahead of us"
+  },
+  "IMG_9989.jpeg": {
+    "date": "2026-01-15",
+    "caption": "colombian colonel sanders...delicious ass chicken"
+  },
+  "ScreenRecording_06-20-2025 21-16-11_1.mov": {
+    "date": "2025-06-21",
+    "caption": "i was so scared seeing you wake up but after a while it was so much fun just entertaining myself while you were the most quiet you have ever been...actually not even because you kept screaming incoherent things!!!"
+  },
+  "Video Nov 08 2025, 5 12 28 PM.MOV": {
+    "date": "2025-11-09",
+    "caption": "big group photo at ashley + eldon's"
+  },
+  "Video Nov 08 2025, 7 45 13 PM.MOV": {
+    "date": "2025-11-09",
+    "caption": "ashley's wedding <3 i wish to forget the heinousness but now you know what my home friends are like and we have stories to tell"
+  }
 }

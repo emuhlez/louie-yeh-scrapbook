@@ -2237,7 +2237,7 @@ P.S. I forgot to add - when you write on the windshield and the wet shower door 
         
         console.log(`📂 Processing ${Object.keys(photoMetadata).length} files from metadata...`);
         
-        Object.entries(photoMetadata).forEach(([filename, date], index) => {
+        Object.entries(photoMetadata).forEach(([filename, metadata], index) => {
           const isVideo = filename.toLowerCase().endsWith('.mov') || filename.toLowerCase().endsWith('.mp4');
           const type = isVideo ? 'video' : 'photo';
           
@@ -2246,6 +2246,10 @@ P.S. I forgot to add - when you write on the windshield and the wet shower door 
           } else {
             photoCount++;
           }
+          
+          // Support both old format (string) and new format (object)
+          const date = typeof metadata === 'string' ? metadata : metadata.date;
+          const caption = typeof metadata === 'string' ? '' : (metadata.caption || '');
           
           // Use filename-based stable ID instead of index
           const cleanFilename = filename.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9]/g, '_');
@@ -2256,7 +2260,7 @@ P.S. I forgot to add - when you write on the windshield and the wet shower door 
             date: date || '2024-01-01',
             title: filename.replace(/\.[^/.]+$/, '').replace(/_/g, ' '),
             content: `photos/${filename}`,
-            caption: ''
+            caption: caption
           };
           
           this.memories.push(memory);
