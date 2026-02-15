@@ -3936,38 +3936,118 @@ P.S. I forgot to add - when you write on the windshield and the wet shower door 
       }
       
       setupPostcardSwipe(stage) {
-        const canSwipe = window.matchMedia("(pointer: coarse)").matches;
+        console.log('Setting up postcard swipe gestures for touch devices');
         
-        if (!canSwipe) {
-          console.log('Not a touch device, skipping swipe setup');
-          return;
-        }
+        let startX = 0, startY = 0, dragging = false, draggedCard = null, startTime = 0;
+        const SWIPE_MIN_PX = 50;
+        const SWIPE_MAX_Y = 80;
         
-        let startX = 0, startY = 0, dragging = false;
-        const SWIPE_MIN_PX = 35;
-        const SWIPE_MAX_Y = 60;
-        
-        stage.addEventListener("pointerdown", (e) => {
+        const handleStart = (e) => {
           dragging = true;
-          startX = e.clientX;
-          startY = e.clientY;
-          stage.setPointerCapture(e.pointerId);
-        }, { passive: true });
+          startTime = Date.now();
+          const touch = e.touches ? e.touches[0] : e;
+          startX = touch.clientX;
+          startY = touch.clientY;
+          
+          // Find the current postcard card
+          const currentCard = this.postcardCards[this.postcardIndex];
+          if (currentCard) {
+            draggedCard = currentCard;
+            draggedCard.style.transition = 'none';
+          }
+        };
         
-        stage.addEventListener("pointerup", (e) => {
+        const handleMove = (e) => {
+          if (!dragging || !draggedCard) return;
+          
+          const touch = e.touches ? e.touches[0] : e;
+          const dx = touch.clientX - startX;
+          const dy = touch.clientY - startY;
+          
+          // Prevent scroll if horizontal swipe is detected
+          if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) {
+            e.preventDefault();
+          }
+          
+          // Use requestAnimationFrame for smoother drag
+          requestAnimationFrame(() => {
+            if (draggedCard) {
+              const rotation = dx * 0.02;
+              draggedCard.style.transform = `translateX(${dx}px) rotate(${rotation}deg)`;
+              draggedCard.style.opacity = 1 - Math.abs(dx) / 300;
+            }
+          });
+        };
+        
+        const handleEnd = (e) => {
           if (!dragging) return;
           dragging = false;
           
-          const dx = e.clientX - startX;
-          const dy = e.clientY - startY;
+          const touch = e.changedTouches ? e.changedTouches[0] : e;
+          const dx = touch.clientX - startX;
+          const dy = touch.clientY - startY;
+          const endTime = Date.now();
+          const duration = endTime - startTime;
+          const velocity = Math.abs(dx) / duration;
           
-          if (Math.abs(dy) > SWIPE_MAX_Y || Math.abs(dx) < SWIPE_MIN_PX) {
+          console.log(`Postcard swipe ended: dx=${dx}, dy=${dy}, velocity=${velocity}`);
+          
+          if (!draggedCard) return;
+          
+          // Check if it's a valid swipe
+          const isValidSwipe = Math.abs(dy) < SWIPE_MAX_Y && 
+                              (Math.abs(dx) > SWIPE_MIN_PX || velocity > 0.5);
+          
+          if (!isValidSwipe) {
+            // Reset card position
+            draggedCard.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+            draggedCard.style.transform = '';
+            draggedCard.style.opacity = '';
+            setTimeout(() => {
+              if (draggedCard) {
+                draggedCard.style.transition = '';
+              }
+            }, 300);
+            draggedCard = null;
             return;
           }
           
-          if (dx > 0) this.postcardNext();
-          else this.postcardPrev();
-        });
+          // Valid swipe - navigate
+          draggedCard = null;
+          if (dx > 0) {
+            console.log('Swiping right - previous');
+            this.postcardPrev();
+          } else {
+            console.log('Swiping left - next');
+            this.postcardNext();
+          }
+        };
+        
+        const handleCancel = () => {
+          if (draggedCard) {
+            draggedCard.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+            draggedCard.style.transform = '';
+            draggedCard.style.opacity = '';
+            draggedCard = null;
+          }
+        };
+        
+        // Use touch events for better mobile support
+        stage.addEventListener("touchstart", handleStart, { passive: true });
+        stage.addEventListener("touchmove", handleMove, { passive: false });
+        stage.addEventListener("touchend", handleEnd, { passive: true });
+        stage.addEventListener("touchcancel", handleCancel, { passive: true });
+        
+        // Also support pointer events for hybrid devices
+        stage.addEventListener("pointerdown", (e) => {
+          if (e.pointerType === 'touch') handleStart(e);
+        }, { passive: true });
+        stage.addEventListener("pointermove", (e) => {
+          if (e.pointerType === 'touch') handleMove(e);
+        }, { passive: false });
+        stage.addEventListener("pointerup", (e) => {
+          if (e.pointerType === 'touch') handleEnd(e);
+        }, { passive: true });
       }
       
       postcardNext() {
