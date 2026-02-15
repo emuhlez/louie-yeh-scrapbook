@@ -38,6 +38,11 @@
       box-sizing: border-box;
     }
     
+    html, body {
+      overflow-x: hidden;
+      overscroll-behavior: none;
+    }
+    
     body {
       font-family: 'Space Mono', monospace;
       font-weight: 400;
@@ -45,7 +50,6 @@
       background: linear-gradient(135deg, #faf8f5 0%, #f5f0e8 100%);
       min-height: 100vh;
       position: relative;
-      overflow-x: hidden;
     }
     
     /* Radial gradient overlays for depth */
@@ -1261,6 +1265,13 @@
        MOBILE RESPONSIVENESS
        ============================================ */
     @media (max-width: 768px) {
+      html, body {
+        height: 100vh;
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+      }
+      
       .nav-header {
         padding: 1.5rem 1rem;
         gap: 2rem;
