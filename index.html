@@ -39,8 +39,11 @@
     }
     
     html, body {
-      overflow-x: hidden;
+      height: 100vh;
+      overflow: hidden;
       overscroll-behavior: none;
+      position: fixed;
+      width: 100%;
     }
     
     body {
@@ -48,8 +51,6 @@
       font-weight: 400;
       color: var(--text-primary);
       background: linear-gradient(135deg, #faf8f5 0%, #f5f0e8 100%);
-      min-height: 100vh;
-      position: relative;
     }
     
     /* Radial gradient overlays for depth */
@@ -1265,13 +1266,6 @@
        MOBILE RESPONSIVENESS
        ============================================ */
     @media (max-width: 768px) {
-      html, body {
-        height: 100vh;
-        overflow: hidden;
-        position: fixed;
-        width: 100%;
-      }
-      
       .nav-header {
         padding: 1.5rem 1rem;
         gap: 2rem;
