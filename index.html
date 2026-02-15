@@ -295,7 +295,7 @@
     .carousel-stage {
       position: relative;
       width: 100%;
-      height: 70vh;
+      height: 55vh;
       display: grid;
       place-items: center;
       perspective: 1200px;
@@ -305,8 +305,8 @@
     /* The ONLY thing that gets transform animations */
     .carousel-card {
       position: absolute;
-      width: clamp(200px, 38vw, 380px);
-      aspect-ratio: 3 / 4;
+      max-width: clamp(180px, 35vw, 350px);
+      max-height: 55vh;
       border-radius: 0;
       overflow: hidden;
       will-change: transform, opacity;
@@ -337,11 +337,13 @@
     
     .print img,
     .print video {
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-      border-radius:0;
+      max-width: 100%;
+      max-height: 55vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      border-radius: 0;
       border: none;
       outline: none;
     }
@@ -1315,7 +1317,13 @@
       }
       
       .carousel-card {
-        width: clamp(180px, 60vw, 320px);
+        max-width: clamp(160px, 65vw, 320px);
+        max-height: 50vh;
+      }
+      
+      .print img,
+      .print video {
+        max-height: 50vh;
       }
       
       /* Caption mobile adjustments */
@@ -2364,7 +2372,6 @@ P.S. I forgot to add - when you write on the windshield and the wet shower door 
           "IMG_6825.jpeg": "2025-09-19",
           "IMG_6844.jpeg": "2025-09-20",
           "IMG_6957.jpeg": "2025-09-24",
-          "IMG_6957 2.jpeg": "2025-09-24",
           "IMG_7043.jpeg": "2025-09-28",
           "IMG_7051.jpeg": "2025-09-29",
           "IMG_7064.jpeg": "2025-09-30",
@@ -3271,7 +3278,6 @@ P.S. I forgot to add - when you write on the windshield and the wet shower door 
         captionContainer.innerHTML = `
           <p class="caption-date">${formattedDate}</p>
           ${memoryCaption ? `<p class="caption-text">${memoryCaption}</p>` : ''}
-          <button class="caption-edit-btn" onclick="app.openEditModal('${memoryId}')">Edit</button>
         `;
         
         // Show caption
